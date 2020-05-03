@@ -44,6 +44,7 @@ export default {
       },
       { deep: true }
     )
+
     this.adaptive && window.addEventListener('resize', this.chart.resize)
   },
   beforeDestroy() {
@@ -55,14 +56,14 @@ export default {
     },
     initState() {
       const titleFontSize = Math.floor(
-        Math.min(this.$el.clientWidth, this.$el.clientHeight) / 30
+        Math.min(this.$el.clientWidth, this.$el.clientHeight) / 25
       )
 
-      if (titleFontSize > 32) this.titleFontSize = 32
+      if (titleFontSize > 35) this.titleFontSize = 35
       else if (titleFontSize < 15) this.titleFontSize = 15
       else this.titleFontSize = titleFontSize
 
-      const contentFontSize = Math.floor(this.titleFontSize * 0.6)
+      const contentFontSize = Math.floor(this.titleFontSize * 0.55)
       this.contentFontSize = contentFontSize < 12 ? 12 : contentFontSize
 
       // console.log(this.titleFontSize, this.contentFontSize)
