@@ -23,12 +23,12 @@ export default {
       default: 'transparent'
     },
 
-    text: String,
+    label: String,
     value: [String, Number],
     formatter: String,
-    fontSize: Number,
-    fontColor: String,
-    backgroundColor: {
+    labelSize: Number,
+    labelColor: String,
+    chartBgColor: {
       type: String,
       default: 'transparent'
     }
@@ -54,11 +54,11 @@ export default {
                 show: true,
                 position: 'center',
                 formatter:
-                  this.formatter || (this.text ? `${this.text}\n{d}%` : '{d}%'),
-                lineHeight: this.fontSize * 1.3 || this.titleFontSize * 2,
-                fontSize: this.fontSize || this.titleFontSize * 1.5,
+                  this.formatter || (this.label ? `${this.label}\n{d}%` : '{d}%'),
+                lineHeight: this.labelSize * 1.3 || this.titleFontSize * 2,
+                fontSize: this.labelSize || this.titleFontSize * 1.5,
                 fontWeight: 'bold',
-                color: this.fontColor || this.color
+                color: this.labelColor || this.color
               },
               itemStyle: {
                 color: this.color
@@ -107,25 +107,25 @@ export default {
         series.push({
           type: 'liquidFill',
           center: ['50%', '50%'],
-          radius: '70%',
+          radius: '80%',
           color: [this.color],
           label: {
             formatter:
               this.formatter ||
               (() =>
-                this.text
-                  ? `${this.text}\n${multiply(value, 100)}%`
+                this.label
+                  ? `${this.label}\n${multiply(value, 100)}%`
                   : `${multiply(value, 100)}%`),
-            fontSize: this.fontSize || this.titleFontSize * 1.5,
-            color: this.fontColor || this.color,
-            lineHeight: this.fontSize * 1.3 || this.titleFontSize * 2
+            fontSize: this.labelSize || this.titleFontSize * 1.5,
+            color: this.labelColor || this.color,
+            lineHeight: this.labelSize * 1.3 || this.titleFontSize * 2
           },
           backgroundStyle: {
             color: this.bgColor
           },
           outline: {
             show: true,
-            borderDistance: 5,
+            borderDistance: this.contentFontSize / 2,
             itemStyle: {
               color: 'none',
               borderColor: Color(this.color)
@@ -139,7 +139,7 @@ export default {
       }
 
       const defaultConfig = {
-        backgroundColor: this.backgroundColor,
+        backgroundColor: this.chartBgColor,
         series
       }
 
