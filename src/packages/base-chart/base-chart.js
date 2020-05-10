@@ -1,4 +1,5 @@
 import echarts from 'echarts'
+import { colors } from '@/utils/config'
 export default {
   name: 'baseChart',
   props: {
@@ -31,8 +32,8 @@ export default {
     this.renderChart()
     this.$watch(
       'option',
-      function() {
-        this.renderChart()
+      function(val, oldVal) {
+        this.renderChart(val != oldVal)
       },
       { deep: true }
     )
@@ -44,8 +45,11 @@ export default {
   },
 
   methods: {
-    renderChart() {
-      this.chart.setOption({ color: this.$echartsColorSet, ...this.option }, true)
+    renderChart(notMerge = false) {
+      this.chart.setOption(
+        { color: this.$echartsColorSet || colors, ...this.option },
+        notMerge
+      )
     }
   },
 
