@@ -7,30 +7,59 @@ export default {
   props: {
     type: {
       type: String,
-      default: 'pie', // pie | angle | ring
+      default: 'pie' // pie | angle | ring
     },
+    title: String,
+    titleColor: {
+      type: String,
+      default: '#000'
+    },
+    titleSize: Number,
+    labelColor: String,
+    labelSize: Number,
+    data: {
+      type: Array,
+      default: () => []
+    },
+
     option: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
+    }
+  },
+
+  watch: {
+    option: {
+      handler(val, oldVal) {
+        this.renderChart(val != oldVal)
+      },
+      deep: true
     },
+    data: {
+      handler(val, oldVal) {
+        this.renderChart(val != oldVal)
+      },
+      deep: true
+    }
   },
 
   methods: {
     createOption() {
       const { title } = this.option
-      const showTitle = title && title.show !== false
+      const showTitle = this.title || (title && title.show !== false)
 
       const defaultConfig = {
         color: this.$echartsColorSet,
         title: showTitle
           ? {
+              text: this.title,
               left: 'center',
               top: this.type === 'ring' ? 'center' : '9%',
               textStyle: {
-                color: this.color,
-                fontSize: this.titleFontSize,
-                lineHeight: this.titleFontSize * 1.2,
-              },
+                color: this.titleColor,
+                fontSize: this.titleSize || this.titleFontSize,
+                lineHeight: (this.titleSize || this.titleFontSize) * 1.2
+              }
             }
           : undefined,
 
@@ -38,8 +67,8 @@ export default {
           trigger: 'item',
           formatter: '{b}<br/>{c}<br/>{d}%',
           textStyle: {
-            fontSize: this.contentFontSize,
-          },
+            fontSize: this.contentFontSize
+          }
         },
 
         series: [
@@ -56,14 +85,21 @@ export default {
             label: {
               show: true,
               formatter: '{b}：{c}\n({d}%)',
-              fontSize: this.contentFontSize,
-              lineHeight: this.contentFontSize + 3,
+              fontSize: this.labelSize || this.contentFontSize,
+              lineHeight: (this.labelSize || this.contentFontSize) + 3,
+              color: this.labelColor || undefined
             },
-          },
-        ],
+            labelLine: {
+              lineStyle: {
+                color: this.labelColor || undefined
+              }
+            },
+            data: this.data
+          }
+        ]
       }
 
       return merge(defaultConfig, this.option)
-    },
-  },
+    }
+  }
 }
