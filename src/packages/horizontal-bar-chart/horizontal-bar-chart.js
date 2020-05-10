@@ -13,7 +13,10 @@ export default {
 
     // 标题
     title: String,
-
+    // 标题字体大小
+    titleSize: Number,
+    // 标题颜色
+    titleColor: String,
     // 类目数组
     category: {
       type: Array,
@@ -56,14 +59,14 @@ export default {
       default: false
     },
 
-    // 轴线，字体的颜色
+    // 字体的颜色
     color: {
       type: String,
       default: '#000'
     },
 
     // label, legend 字体大小
-    fontSize: Number,
+    labelSize: Number,
 
     // type === two-way 时，调整中间 label 距离容器左边位置
     // 可以是的百分比或绝对像素值
@@ -77,14 +80,16 @@ export default {
     gridWidth: {
       type: [String, Number],
       default: '37%'
-    }
+    },
+
+    gridTop: [String, Number]
   },
 
   methods: {
     createOption() {
       const showTitle = !!this.title
       const showLegend = this.series.some(item => !!item.name)
-
+      const labelSize = this.labelSize || this.contentFontSize
       const itemColor = (color, index) => {
         color = color || this.$echartsColorSet[index % this.$echartsColorSet.length]
         return this.gradient
@@ -112,6 +117,7 @@ export default {
 
       const backgroundConfig = (color, index) => {
         color = color || this.$echartsColorSet[index % this.$echartsColorSet.length]
+
         return {
           showBackground: this.background || this.border,
           backgroundStyle: {
@@ -134,7 +140,7 @@ export default {
       let grid, xAxis, yAxis, series
       if (this.type === 'two-way') {
         const gridCommon = {
-          top: showTitle || showLegend ? '12%' : '5%',
+          top: showTitle || showLegend ? this.gridTop || '12%' : '5%',
           bottom: '4%',
           containLabel: true
         }
@@ -201,7 +207,7 @@ export default {
             axisLabel: {
               show: true,
               color: this.color,
-              fontSize: this.fontSize || this.contentFontSize
+              fontSize: labelSize
             },
             ...yAxisCommon,
             data: this.category.map(value => ({
@@ -229,7 +235,7 @@ export default {
               show: true,
               position: i === 0 ? 'left' : 'right',
               color: this.color,
-              fontSize: (this.fontSize || this.contentFontSize) * 0.9
+              fontSize: labelSize * 0.9
             },
             itemStyle: {
               color: itemColor(item.color, i),
@@ -261,7 +267,7 @@ export default {
             axisTick: { show: false },
             axisLabel: {
               color: this.color,
-              fontSize: this.fontSize || this.contentFontSize,
+              fontSize: labelSize,
               margin: 12
             }
           }
@@ -275,7 +281,7 @@ export default {
             show: true,
             position: this.stack ? 'insideRight' : 'right',
             color: this.color,
-            fontSize: (this.fontSize || this.contentFontSize) * 0.9
+            fontSize: labelSize * 0.9
           },
           itemStyle: {
             color: itemColor(item.color, i),
@@ -293,8 +299,8 @@ export default {
           left: '3%',
           top: '3.5%',
           textStyle: {
-            fontSize: this.titleFontSize,
-            color: this.color
+            fontSize: this.titleSize || this.titleFontSize,
+            color: this.titleColor || this.color
           }
         },
         legend: {
@@ -302,9 +308,12 @@ export default {
           right: showTitle ? '5%' : 'center',
           top: '3.5%',
           textStyle: {
-            fontSize: this.fontSize || this.contentFontSize,
+            fontSize: labelSize,
             color: this.color
-          }
+          },
+          itemWidth: labelSize * 1.5,
+          itemHeight: labelSize,
+          itemGap: 12
         },
         grid,
         xAxis,
