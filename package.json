@@ -1,10 +1,8 @@
 {
-  "name": "echarts-vue-components",
+  "name": "@yangss/echarts-vue-components",
   "version": "1.0.0",
   "description": "A few simple chart components based on Echarts and Vue",
   "main": "lib/echarts-vue-components.ssr.js",
-  "browser": "lib/echarts-vue-components.esm.js",
-  "module": "lib/echarts-vue-components.esm.js",
   "unpkg": "lib/echarts-vue-components.min.js",
   "files": [
     "lib",
@@ -15,7 +13,9 @@
     "build": "cross-env NODE_ENV=production rollup --config build/rollup.config.js",
     "build:ssr": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format cjs",
     "build:es": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format es",
-    "build:unpkg": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format iife"
+    "build:unpkg": "cross-env NODE_ENV=production rollup --config build/rollup.config.js --format iife",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
   },
   "dependencies": {
     "color": "^3.1.2",
@@ -42,7 +42,8 @@
     "vue-template-compiler": "^2.6.11"
   },
   "peerDependencies": {
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "echarts": "^4.7.0"
   },
   "engines": {
     "node": ">=10"
@@ -51,5 +52,10 @@
     "echarts",
     "vue",
     "components"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yangss3/echarts-vue-components.git"
+  },
+  "homepage": "https://github.com/yangss3/echarts-vue-components"
 }

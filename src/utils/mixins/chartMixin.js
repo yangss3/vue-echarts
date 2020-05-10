@@ -1,4 +1,6 @@
 import echarts from 'echarts'
+import { colors } from '@/utils/config'
+
 export default {
   props: {
     height: {
@@ -12,16 +14,9 @@ export default {
     adaptive: {
       type: Boolean,
       default: false
-    },
-    color: {
-      type: String,
-      default: '#000'
-    },
-    option: {
-      type: Object,
-      default: () => ({})
     }
   },
+
   data() {
     return {
       chart: null,
@@ -30,30 +25,29 @@ export default {
       showTitle: true
     }
   },
+
   mounted() {
     this.chart = echarts.init(this.$el)
 
     this.initState()
 
-    this.renderChart()
+    this.$echartsColorSet =
+      (this.option && this.option.color) || this.$echartsColorSet || colors
 
-    this.$watch(
-      'option',
-      function() {
-        this.renderChart()
-      },
-      { deep: true }
-    )
+    this.renderChart()
 
     this.adaptive && window.addEventListener('resize', this.chart.resize)
   },
+
   beforeDestroy() {
     this.adaptive && window.removeEventListener('resize', this.chart.resize)
   },
+
   methods: {
-    renderChart() {
-      this.chart.setOption(this.createOption(), true)
+    renderChart(notMerge = false) {
+      this.chart.setOption(this.createOption(), notMerge)
     },
+
     initState() {
       const titleFontSize = Math.floor(
         Math.min(this.$el.clientWidth, this.$el.clientHeight) / 25
@@ -65,10 +59,9 @@ export default {
 
       const contentFontSize = Math.floor(this.titleFontSize * 0.55)
       this.contentFontSize = contentFontSize < 12 ? 12 : contentFontSize
-
-      // console.log(this.titleFontSize, this.contentFontSize)
     }
   },
+
   render(h) {
     return h('div', {
       style: {
