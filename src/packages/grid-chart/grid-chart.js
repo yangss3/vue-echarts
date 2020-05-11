@@ -50,11 +50,15 @@ export default {
       default: () => ({})
     },
 
+    // 同时展示的类目数，当类目总数超过这个值时，类目会滚动显示
+    // 不传值时，默认同时展示所有类目
     size: Number,
+    // 类目滚动时间间隔，毫秒
     interval: {
       type: Number,
       default: 3000
     },
+    // 是否开启自动滚动
     auto: {
       type: Boolean,
       default: true
