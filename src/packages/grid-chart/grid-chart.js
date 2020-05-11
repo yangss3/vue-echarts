@@ -51,7 +51,10 @@ export default {
     },
 
     size: Number,
-    interval: Number,
+    interval: {
+      type: Number,
+      default: 3000
+    },
     auto: {
       type: Boolean,
       default: true
@@ -62,7 +65,9 @@ export default {
     return {
       ctgQueue: [],
       ctgPool: [],
-      timer: null
+      chartOption: {},
+      timer: null,
+      ctgMap: new Map()
     }
   },
 
@@ -73,79 +78,88 @@ export default {
     categoryAxis() {
       const yAxis = this.option.yAxis
       return (Array.isArray(yAxis) &&
-        yAxis.some(item => item.name === 'category')) ||
-        (yAxis && yAxis.name === 'category')
-        ? 'y'
-        : 'x'
+        yAxis.some(item => item.type === 'category')) ||
+        (yAxis && yAxis.type === 'category')
+        ? 'yAxis'
+        : 'xAxis'
     }
   },
 
   watch: {
     option: {
       handler(val, oldVal) {
+        console.log('watch')
         this.renderChart(val != oldVal)
       },
       deep: true
     }
   },
 
+  beforeDestroy() {
+    this.timer && clearInterval(this.timer)
+  },
+
   methods: {
     renderChart(noMerge) {
-      const chartOption = cloneDeep(this.option)
-      chartOption.xAxis = wrapWithArray(chartOption.xAxis)
-      chartOption.yAxis = wrapWithArray(chartOption.yAxis)
-      chartOption.series = wrapWithArray(chartOption.series)
+      this.timer && clearInterval(this.timer)
+      this.chartOption = cloneDeep(this.option)
+      this.chartOption.xAxis = wrapWithArray(this.chartOption.xAxis)
+      this.chartOption.yAxis = wrapWithArray(this.chartOption.yAxis)
+      this.chartOption.series = wrapWithArray(this.chartOption.series)
 
-      const format = (data, size) =>
-        data.map(item => ({
-          ...item,
-          data: item.data.slice(0, size),
-          __dataPool: item.data.slice(size)
-        }))
+      const ctgArr = this.chartOption[this.categoryAxis][0].data
+      if (this.size && this.size < ctgArr.length) {
+        ctgArr.forEach((ctg, i) => this.ctgMap.set(ctg, i))
 
-      if (this.size) {
-        const ctgLen = chartOption.series[0].data.legend
-        if (ctgLen > this.size) {
-          this.chart.setOption(
-            this.createOption({
-              ...chartOption,
-              xAxis:
-                this.categoryAxis === 'x'
-                  ? format(chartOption.xAxis)
-                  : chartOption.xAxis,
-              yAxis:
-                this.categoryAxis === 'y'
-                  ? format(chartOption.yAxis)
-                  : chartOption.yAxis,
-              series: format(chartOption.series)
-            }),
-            true
-          )
-          if (this.auto) this.timer = setInterval(this.startMove, this.interval)
-        } else {
-          this.chart.setOption(this.createOption(chartOption), noMerge)
-        }
-      } else {
-        this.chart.setOption(this.createOption(chartOption), noMerge)
+        const initData = item =>
+          item.__dataPool = item.data.splice(this.size)
+
+        this.chartOption.series.forEach(initData)
+        this.chartOption[this.categoryAxis].forEach(initData)
+
+        noMerge = true
+        this.auto && this.startMove()
       }
+
+      this.chart.setOption(this.createOption(), noMerge)
     },
 
-    startMove() {},
+    startMove() {
+      this.timer = setInterval(this.move, this.interval)
+    },
 
-    stopMove() {},
+    stopMove() {
+      clearInterval(this.timer)
+    },
 
-    createOption(option) {
-      const { title, xAxis, yAxis, series } = option
+    move() {
+      const mvAxis = (item, i) => {
+        const moveIn = item.__dataPool.shift()
+        item.data.push(moveIn)
+        const moveOut = item.data.shift()
+        item.__dataPool.push(moveOut)
 
-      const twoAxis = Array.isArray(yAxis) && yAxis.length > 1
+        if (i === 0) {
+          this.$emit('move', this.ctgMap.get(moveIn), this.ctgMap.get(moveOut))
+        }
+      }
+
+      const mvSeries = (item) => {
+        item.data.push(item.__dataPool.shift())
+        item.__dataPool.push(item.data.shift())
+      }
+
+      this.chartOption[this.categoryAxis].forEach(mvAxis)
+      this.chartOption.series.forEach(mvSeries)
+      this.chart.setOption(this.createOption(), true)
+    },
+
+    createOption() {
+      const { title, xAxis, yAxis, series } = this.chartOption
+
       const showTitle =
         (this.title && (!title || title.show !== false)) ||
         (title && title.show !== false)
-      // const categoryAxis =
-      //   (Array.isArray(yAxis) && yAxis.some(item => item.name === 'category')) ||
-      //     yAxis.name === 'category'
-      //     ? 'y'
-      //     : 'x'
 
       const defaultConfig = {
         title: {
@@ -160,7 +174,7 @@ export default {
 
         grid: {
           top: '20%',
-          right: twoAxis ? '5.5%' : '6%',
+          right: yAxis.length > 1 ? '5.5%' : '6%',
           bottom: '5%',
           left: '6%',
           containLabel: true
@@ -191,14 +205,14 @@ export default {
 
         xAxis: xAxis.length
           ? xAxis.map((item, i) =>
-              this.axisConfig('x', i, this.categoryAxis === 'x')
-            )
+            this.axisConfig('x', i, this.categoryAxis === 'xAxis')
+          )
           : [this.axisConfig('x', 0)],
 
         yAxis: yAxis.length
           ? yAxis.map((item, i) =>
-              this.axisConfig('y', i, this.categoryAxis === 'y')
-            )
+            this.axisConfig('y', i, this.categoryAxis === 'yAxis')
+          )
           : [this.axisConfig('y', 0)],
 
         series: ['line', 'bar'].includes(this.type)
@@ -206,7 +220,7 @@ export default {
           : series.map((item, i) => this.itemConfig(item.type, i))
       }
 
-      return merge(defaultConfig, option)
+      return merge(defaultConfig, this.chartOption)
     },
 
     axisConfig(type, index, isCategoryAxis) {
@@ -257,31 +271,31 @@ export default {
         colorStops:
           type === 'line'
             ? [
-                {
-                  offset: 0,
-                  color: Color(color)
-                    .fade(0.5)
-                    .toString() // 0% 处的颜色
-                },
-                {
-                  offset: 1,
-                  color: Color(color)
-                    .fade(1)
-                    .toString() // 100% 处的颜色
-                }
-              ]
+              {
+                offset: 0,
+                color: Color(color)
+                  .fade(0.5)
+                  .toString() // 0% 处的颜色
+              },
+              {
+                offset: 1,
+                color: Color(color)
+                  .fade(1)
+                  .toString() // 100% 处的颜色
+              }
+            ]
             : [
-                {
-                  offset: 1,
-                  color: color // 0% 处的颜色
-                },
-                {
-                  offset: 0,
-                  color: Color(color)
-                    .lighten(0.5)
-                    .toString() // 100% 处的颜色
-                }
-              ]
+              {
+                offset: 1,
+                color: color // 0% 处的颜色
+              },
+              {
+                offset: 0,
+                color: Color(color)
+                  .lighten(0.5)
+                  .toString() // 100% 处的颜色
+              }
+            ]
       }
 
       const lineGradient = this.gradient === true || this.gradient.line === true
@@ -289,31 +303,31 @@ export default {
 
       return type === 'line'
         ? {
-            type: 'line',
-            smooth: this.smooth,
-            symbol: 'circle',
-            symbolSize: this.labelFontSize,
-            itemStyle: {
-              color: color
-            },
-            areaStyle: {
-              color: lineGradient ? gradientColor : 'transparent'
-            }
+          type: 'line',
+          smooth: this.smooth,
+          symbol: 'circle',
+          symbolSize: this.labelFontSize,
+          itemStyle: {
+            color: color
+          },
+          areaStyle: {
+            color: lineGradient ? gradientColor : 'transparent'
           }
+        }
         : {
-            type: 'bar',
-            stack: this.stack,
-            label: {
-              show: this.stack,
-              position: 'inside',
-              color: this.color,
-              fontSize: this.labelFontSize * 0.8
-            },
-            itemStyle: {
-              color: barGradient ? gradientColor : color,
-              barBorderRadius: this.round && !this.stack ? [50, 50, 0, 0] : 0
-            }
+          type: 'bar',
+          stack: this.stack,
+          label: {
+            show: this.stack,
+            position: 'inside',
+            color: this.color,
+            fontSize: this.labelFontSize * 0.8
+          },
+          itemStyle: {
+            color: barGradient ? gradientColor : color,
+            barBorderRadius: this.round && !this.stack ? [50, 50, 0, 0] : 0
           }
+        }
     }
   }
 }
