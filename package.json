@@ -20,7 +20,8 @@
   "dependencies": {
     "color": "^3.1.2",
     "echarts-liquidfill": "^2.0.5",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.15",
+    "vuepress": "^1.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
@@ -42,8 +43,8 @@
     "vue-template-compiler": "^2.6.11"
   },
   "peerDependencies": {
-    "vue": "^2.6.11",
-    "echarts": "^4.7.0"
+    "echarts": "^4.7.0",
+    "vue": "^2.6.11"
   },
   "engines": {
     "node": ">=10"
