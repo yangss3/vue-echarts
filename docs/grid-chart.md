@@ -10,23 +10,23 @@
 
 ```js
 // main.js
-import Vue from 'vue';
-import { GridChart } from '@yangss/echarts-vue-components';
+import Vue from 'vue'
+import { GridChart } from '@yangss/echarts-vue-components'
 
-Vue.use(GridChart);
+Vue.use(GridChart)
 ```
 
 局部引入
 
 ```js
 // SFC.vue
-import { GridChart } from '@yangss/echarts-vue-components';
+import { GridChart } from '@yangss/echarts-vue-components'
 export default {
   // ...
   components: {
-    GridChart,
-  },
-};
+    GridChart
+  }
+}
 ```
 
 简单使用
@@ -39,26 +39,26 @@ export default {
 </template>
 
 <script>
-  import { GridChart } from '@yangss/echarts-vue-components';
+  import { GridChart } from '@yangss/echarts-vue-components'
   export default {
     components: {
-      GridChart,
+      GridChart
     },
     data() {
       return {
         option: {
           xAxis: {
-            data: ['一月', '二月', '三月'],
+            data: ['一月', '二月', '三月']
           },
           series: [
             {
-              data: [234, 343, 334],
-            },
-          ],
-        },
-      };
-    },
-  };
+              data: [234, 343, 334]
+            }
+          ]
+        }
+      }
+    }
+  }
 </script>
 ```
 
@@ -102,7 +102,7 @@ export default {
 
 GridChart 的类目数据和系列数据需要通过 `option` 来提供，`option` 的配置格式与 **echarts** 实例方法 `setOption` 的第一个参数完全相同，实际上，GridChart 在内部会将 `option` 与默认配置合并，然后传递给 `setOption` 方法。
 
-通常你不需要对 `option` 做很多配置就能实现简单的线图和柱图，但是如果通过配置 GridChart 提供的便捷属性产生的效果不能满足你的要求，你也可以通过 `option` 属性来实现更细粒度的控制，它比默认配置有更高的优先级。
+除了 axis 和 series， 通常你不需要对 `option` 做很多配置就能实现简单的线图和柱图，但是如果通过设置 GridChart 提供的便捷属性无法达到你想要的效果，你也可以通过配置 `option` 来实现更细粒度的控制，它比默认配置有更高的优先级。
 
 ### 关于 `size`, `interval`, `auto`
 
@@ -143,20 +143,20 @@ GridChart 的类目数据和系列数据需要通过 `option` 来提供，`optio
               '德国',
               '巴西',
               '土耳其',
-              '伊朗',
-            ],
+              '伊朗'
+            ]
           },
           series: [
             {
-              data: [140, 27, 23, 22, 21, 18, 17, 16, 13, 10],
-            },
-          ],
-        },
-      };
+              data: [140, 27, 23, 22, 21, 18, 17, 16, 13, 10]
+            }
+          ]
+        }
+      }
     },
     mouted() {
       // 5s 后开启滚动
-      setTimeout(() => this.$refs.grid.startMove(), 5000);
+      setTimeout(() => this.$refs.grid.startMove(), 5000)
     },
 
     methods: {
@@ -166,10 +166,19 @@ GridChart 的类目数据和系列数据需要通过 `option` 来提供，`optio
         // 在这里可以做一些逻辑处理
         // 例如当所有类目都展示完之后，即最后一个类目移入后停止滚动
         if (moveInIndex === this.option.xAxis.data.length - 1) {
-          this.$refs.grid.stopMove();
+          this.$refs.grid.stopMove()
         }
-      },
-    },
-  };
+      }
+    }
+  }
 </script>
 ```
+
+## Example
+
+<p class="codepen" data-height="400" data-theme-id="dark" data-default-tab="js,result" data-user="yshushan" data-slug-hash="xxwWvea" style="height: 400px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;" data-pen-title="GridChart">
+  <span>See the Pen <a href="https://codepen.io/yshushan/pen/xxwWvea">
+  GridChart</a> by Shushan Yang (<a href="https://codepen.io/yshushan">@yshushan</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<script async src="https://static.codepen.io/assets/embed/ei.js"></script>

@@ -8,7 +8,7 @@ export default {
   name: 'gridChart',
   mixins: [chartMixin],
   props: {
-    type: String, // 'line' | 'bar' | undefined
+    type: String, // 'line' | 'bar'
     // 标题
     title: String,
     // 是否将柱状图堆叠
