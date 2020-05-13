@@ -4,64 +4,6 @@
 
 组件内部为柱图和线图的提供了简单的默认配置，你只需要提供较少的配置属性即可实现简单的柱图和线图。
 
-## Usage
-
-全局注册
-
-```js
-// main.js
-import Vue from 'vue'
-import { GridChart } from '@yangss/echarts-vue-components'
-
-Vue.use(GridChart)
-```
-
-局部引入
-
-```js
-// SFC.vue
-import { GridChart } from '@yangss/echarts-vue-components'
-export default {
-  // ...
-  components: {
-    GridChart
-  }
-}
-```
-
-简单使用
-
-```html
-<template>
-  <div>
-    <grid-chart type="line" title="苹果一季度手机出货量" :option="option" />
-  </div>
-</template>
-
-<script>
-  import { GridChart } from '@yangss/echarts-vue-components'
-  export default {
-    components: {
-      GridChart
-    },
-    data() {
-      return {
-        option: {
-          xAxis: {
-            data: ['一月', '二月', '三月']
-          },
-          series: [
-            {
-              data: [234, 343, 334]
-            }
-          ]
-        }
-      }
-    }
-  }
-</script>
-```
-
 ## API
 
 ### Props
@@ -98,7 +40,7 @@ export default {
 |  startMove  |                               手动触发类目轴的滚动，前提是你设置了 `size` 属性，且将 `auto` 设置为`false`                                |     -      |
 |  stopMove   |                                                       调用该方法暂停类目轴滚动行为                                                       |     -      |
 
-## 关于 `option` 属性
+### 关于 `option`
 
 GridChart 的类目数据和系列数据需要通过 `option` 来提供，`option` 的配置格式与 **echarts** 实例方法 `setOption` 的第一个参数完全相同，实际上，GridChart 在内部会将 `option` 与默认配置合并，然后传递给 `setOption` 方法。
 
@@ -106,77 +48,11 @@ GridChart 的类目数据和系列数据需要通过 `option` 来提供，`optio
 
 ### 关于 `size`, `interval`, `auto`
 
-提供这三个属性是了方便实现类目轴循环滚动显示的功能。如果设置了 `size` 属性，且 `size` 的值小于类目的个数，将开启滚动显示, 如果 `auto` 设置成了 `false`，则可以通过调用 GridChart 的实例方法 `startMove` 来手动开启滚动:
-
-```html
-<template>
-  <!-- 图表渲染结束后自动开启滚动，默认每 3s 滚动一个类目 -->
-  <grid-chart type="bar" :option="option" :size="6" @move="move" />
-
-  <!-- 通过调用 this.$refs.grid.startMove() 手动开启滚动，滚动间隔为 1s-->
-  <grid-chart
-    ref="grid"
-    type="bar"
-    :option="option"
-    :size="6"
-    :interval="1000"
-    :auto="false"
-  />
-</template>
-
-<script>
-  export default {
-    //...
-    data() {
-      return {
-        option: {
-          xAxis: {
-            // 默认 x 轴是类目轴
-            // 这里类目个数为10，大于 size , 将会开启滚动显示
-            data: [
-              '美国',
-              '西班牙',
-              '英国',
-              '俄罗斯',
-              '意大利',
-              '法国',
-              '德国',
-              '巴西',
-              '土耳其',
-              '伊朗'
-            ]
-          },
-          series: [
-            {
-              data: [140, 27, 23, 22, 21, 18, 17, 16, 13, 10]
-            }
-          ]
-        }
-      }
-    },
-    mouted() {
-      // 5s 后开启滚动
-      setTimeout(() => this.$refs.grid.startMove(), 5000)
-    },
-
-    methods: {
-      // 类目轴每移动一次，都会触发 move 事件
-      // 处理函数会接收两个参数，分别是当前移入和移出的类目索引
-      move(moveInIndex, moveOutIndex) {
-        // 在这里可以做一些逻辑处理
-        // 例如当所有类目都展示完之后，即最后一个类目移入后停止滚动
-        if (moveInIndex === this.option.xAxis.data.length - 1) {
-          this.$refs.grid.stopMove()
-        }
-      }
-    }
-  }
-</script>
-```
+提供这三个属性是为了方便实现类目轴循环滚动显示的功能。如果设置了 `size` 属性，且 `size` 的值小于类目的个数，将开启滚动显示, 如果 `auto` 设置成了 `false`，则可以通过调用 GridChart 的实例方法 `startMove` 来手动开启滚动。默认每 3s 滚动一个类目，你也可以设置 `interval` 来修改滚动时间间隔。每次滚动都会触发 `move` 事件，事件监听器会接收当前移入和移出的类目索引作为参数，你可以在这里添加一些逻辑处理，例如当所有类目都展示完之后，即最后一个类目移入后调用实例方法 `stopMove` 来停止滚动。详情请看下面的例子。
 
 ## Example
 
-<p class="codepen" data-height="400" data-theme-id="dark" data-default-tab="js,result" data-user="yshushan" data-slug-hash="xxwWvea" style="height: 400px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;" data-pen-title="GridChart">
+<p class="codepen" data-height="500" data-theme-id="dark" data-default-tab="js,result" data-user="yshushan" data-slug-hash="xxwWvea" style="margin-top:20px;height: 500px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;" data-pen-title="GridChart">
   <span>See the Pen <a href="https://codepen.io/yshushan/pen/xxwWvea">
   GridChart</a> by Shushan Yang (<a href="https://codepen.io/yshushan">@yshushan</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
