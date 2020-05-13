@@ -2,6 +2,10 @@
 
 饼图组件, 内置了饼图(pie), 南丁格尔图(angle)和圆环图(ring)三种类型的配置
 
+## API
+
+### Props
+
 |   props    |                       description                        |            type            |                    default                    |
 | :--------: | :------------------------------------------------------: | :------------------------: | :-------------------------------------------: |
 |   width    |  图表容器的宽度, 可以是父容器宽度的百分比或绝对像素值等  |          `string`          |                   `"100%"`                    |
@@ -13,15 +17,26 @@
 | labelColor |                    类目标签本文的颜色                    |          `string`          |     默认和与之对应的类目 body 的颜色相同      |
 | titleSize  |                标题本文的字体大小, 像素值                |          `number`          | 一般无需提供,默认根据容器尺寸自动计算字体大小 |
 | labelSize  |              类目标签本文的字体大小, 像素值              |          `number`          | 一般无需提供,默认根据容器尺寸自动计算字体大小 |
-|    data    |                         类目数据                         |          `Array`           |                       -                       |
+|    data    |                        类目的数据                        |          `Array`           |                       -                       |
 |   option   |       `echarts` 原生的配置对象, 用于更细粒度的配置       |          `Object`          |                       -                       |
 
+::: tip 关于 data 属性
+**PieChart** 通过 `data` 来提供类目的数据，`data` 是一个包含每个类目配置对象的数组，数据格式与 [series-pie.data](https://echarts.apache.org/zh/option.html#series-pie.data) 完全相同。大多数情况下， 你不需要使用`option`，只需要配置 `data`就能实现简单的饼图效果。PieChart 内部也监听了 `data` 属性的变化，当 `data` 有变更时，会触发视图更新。
+:::
 
-如果默认的效果达不到你的需求, 你还可以通过 `option` 属性来进行更细粒度的配置.
+::: tip 注意
+**PieChart** 默认配置只支持一个系列的数据, 如果需要展示多个系列, 可以使用 **BaseChart** 组件自行配置。
+:::
 
-> 注意: `PieChart` 默认配置只支持一个系列的数据, 如果需要显示多个系列, 请直接使用 `BaseChart`
+### Methods
 
+|    Name     |                                                                    Description                                                                    |                       Parameters                        |
+| :---------: | :-----------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------: |
+| renderChart | 调用该方法会触发图表重绘, `PieChart` 内部只监听了 `data` 和 `option` 属性的变化，如果你动态修改了其它属性的值，可以手动调用这个方法来触发视图更新 | noMerge: `boolean` 是否合并 option， 默认为 false，合并 |
 
+## Example
+
+<div style="height:20px;"></div>
 <p class="codepen" data-height="380" data-theme-id="dark" data-default-tab="js,result" data-user="yshushan" data-slug-hash="LYpdwEe" data-preview="true" style="height: 380px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;" data-pen-title="PieChart">
   <span>See the Pen <a href="https://codepen.io/yshushan/pen/LYpdwEe">
   PieChart</a> by Shushan Yang (<a href="https://codepen.io/yshushan">@yshushan</a>)

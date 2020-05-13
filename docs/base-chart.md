@@ -21,32 +21,30 @@
 </template>
 
 <script>
-  import { BaseChart } from '@yangss/echarts-vue-components';
+  import { BaseChart } from '@yangss/echarts-vue-components'
   export default {
     components: { BaseChart },
     data() {
       return {
         option: {
           // configuration
-        },
-      };
-    },
-  };
+        }
+      }
+    }
+  }
 </script>
 ```
 
 BaseChart 只对原生的 echarts 实例进行了浅封装, 组件实例的 `chart` 属性暴露了当前图表的 echarts 实例对象。上面的示例中, 你可以通过 `this.$refs.myChart.chart` 来访问 [echarts 实例对象上的所有 API](https://www.echartsjs.com/zh/api.html#echartsInstance)
 
-BaseChart 内部监听了 `option` 的变动，当更改 `option` 后，会自动触发视图更新。
-
-这里的更改包含两种情况：
+BaseChart 内部监听了 `option` 的变动，当更改 `option` 后，会自动触发视图更新。这里的更改包含两种情况：
 
 - 更改 `option` 的属性
 
 ```js
 this.option.title = {
   /*  */
-};
+}
 ```
 
 这种情况，会与之前的 option 进行合并来更新视图，这相当于 `this.$refs.myChart.chart.setOption(this.option, false)`
@@ -57,9 +55,9 @@ this.option.title = {
 this.option = {
   title: {
     // ...
-  },
+  }
   // ...
-};
+}
 ```
 
-这种情况，不会与之前的 option 合并，这相当于 `this.$refs.myChart.chart.setOption(this.option, true)`
+这种情况，新的 option 不会与之前的 option 合并，这相当于 `this.$refs.myChart.chart.setOption(this.option, true)`

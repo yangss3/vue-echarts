@@ -96,7 +96,7 @@ export default {
   },
 
   methods: {
-    renderChart(noMerge) {
+    renderChart(noMerge = false) {
       this.timer && clearInterval(this.timer)
       this.ctgMap.clear()
 

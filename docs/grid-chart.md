@@ -1,8 +1,6 @@
 # GridChart
 
-直角坐标系图表, 一般指柱图和线图。
-
-组件内部为柱图和线图的提供了简单的默认配置，你只需要提供较少的配置属性即可实现简单的柱图和线图。
+直角坐标系图表, 组件内部为柱图和线图的提供了简单的默认配置，你只需要提供较少的配置即可实现简单的柱图和线图。
 
 ## API
 
@@ -26,6 +24,13 @@
 | interval  |                                                 滚动时间间隔, 毫秒数                                                 |                   `number`                    |              `3000`              |
 |   auto    |                                                   是否开启自动滚动                                                   |                   `boolean`                   |              `true`              |
 
+::: tip 关于 option
+
+GridChart 的类目数据和系列数据需要通过 `option` 来提供，`option` 的配置格式与 **echarts** 实例方法 `setOption` 的第一个参数完全相同，实际上，GridChart 在内部会将 `option` 与默认配置合并，然后传递给 `setOption` 方法。
+
+除了 axis 和 series， 通常你不需要对 `option` 做很多配置就能实现简单的线图和柱图，但是如果通过设置 GridChart 提供的便捷属性无法达到你想要的效果，你也可以通过配置 `option` 来实现更细粒度的控制，它比默认配置有更高的优先级。
+:::
+
 ### Events
 
 | Name |   Description    |                  Parameters                  |
@@ -34,25 +39,20 @@
 
 ### Methods
 
-|    Name     |                                                               Description                                                                | Parameters |
-| :---------: | :--------------------------------------------------------------------------------------------------------------------------------------: | :--------: |
-| renderChart | 调用该方法会触发图表重绘, `GridChart` 内部只监听了 `option` 属性的变化，如果你动态修改了其它属性的值，可以手动调用这个方法来触发视图更新 |     -      |
-|  startMove  |                               手动触发类目轴的滚动，前提是你设置了 `size` 属性，且将 `auto` 设置为`false`                                |     -      |
-|  stopMove   |                                                       调用该方法暂停类目轴滚动行为                                                       |     -      |
+|    Name     |                                                               Description                                                                |                       Parameters                        |
+| :---------: | :--------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------: |
+| renderChart | 调用该方法会触发图表重绘, `GridChart` 内部只监听了 `option` 属性的变化，如果你动态修改了其它属性的值，可以手动调用这个方法来触发视图更新 | noMerge: `boolean` 是否合并 option， 默认为 false，合并 |
+|  startMove  |                               手动触发类目轴的滚动，前提是你设置了 `size` 属性，且将 `auto` 设置为`false`                                |                            -                            |
+|  stopMove   |                                                       调用该方法暂停类目轴滚动行为                                                       |                            -                            |
 
-### 关于 `option`
-
-GridChart 的类目数据和系列数据需要通过 `option` 来提供，`option` 的配置格式与 **echarts** 实例方法 `setOption` 的第一个参数完全相同，实际上，GridChart 在内部会将 `option` 与默认配置合并，然后传递给 `setOption` 方法。
-
-除了 axis 和 series， 通常你不需要对 `option` 做很多配置就能实现简单的线图和柱图，但是如果通过设置 GridChart 提供的便捷属性无法达到你想要的效果，你也可以通过配置 `option` 来实现更细粒度的控制，它比默认配置有更高的优先级。
-
-### 关于 `size`, `interval`, `auto`
-
-提供这三个属性是为了方便实现类目轴循环滚动显示的功能。如果设置了 `size` 属性，且 `size` 的值小于类目的个数，将开启滚动显示, 如果 `auto` 设置成了 `false`，则可以通过调用 GridChart 的实例方法 `startMove` 来手动开启滚动。默认每 3s 滚动一个类目，你也可以设置 `interval` 来修改滚动时间间隔。每次滚动都会触发 `move` 事件，事件监听器会接收当前移入和移出的类目索引作为参数，你可以在这里添加一些逻辑处理，例如当所有类目都展示完之后，即最后一个类目移入后调用实例方法 `stopMove` 来停止滚动。详情请看下面的例子。
+::: tip 类目轴滚动显示
+当类目较多，无法同时展示所有类目是，可能需要让类目循环滚动展示的需求， GridChart 提供了 `size`, `auto`, `interval` 三个属性，可以快速实现类目轴循环滚动展示的效果。如果设置了 `size` 属性，且 `size` 的值小于类目的个数，将开启滚动显示, 如果 `auto` 设置成了 `false`，则可以通过调用 GridChart 的实例方法 `startMove` 来手动开启滚动。默认每 3s 滚动一个类目，你也可以设置 `interval` 来修改滚动时间间隔。每次滚动都会触发 `move` 事件，事件监听器会接收当前移入和移出的类目索引作为参数，你可以在这里添加一些逻辑处理，例如当所有类目都展示完之后，即最后一个类目移入后调用实例方法 `stopMove` 来停止滚动。详情请看下面的例子。
+:::
 
 ## Example
 
-<p class="codepen" data-height="500" data-theme-id="dark" data-default-tab="js,result" data-user="yshushan" data-slug-hash="xxwWvea" style="margin-top:20px;height: 500px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;" data-pen-title="GridChart">
+<div style="height:20px;"></div>
+<p class="codepen" data-height="389" data-theme-id="dark" data-default-tab="js,result" data-user="yshushan" data-slug-hash="xxwWvea" data-preview="true" style="height: 389px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;" data-pen-title="GridChart">
   <span>See the Pen <a href="https://codepen.io/yshushan/pen/xxwWvea">
   GridChart</a> by Shushan Yang (<a href="https://codepen.io/yshushan">@yshushan</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
