@@ -12,16 +12,16 @@
 |   height   |  图表容器的高度, 可以是父容器高度的百分比或绝对像素值等  |          `string`          |                   `"100%"`                    |
 |  adaptive  |     当窗口 resize 时, 是否让图表重绘以自适应窗口大小     |         `boolean`          |                    `false`                    |
 |    type    | 饼图的类型, 内置提供"pie", "angle","ring" 三种简单的类型 | `"pie" | "angle" | "ring"` |                    `"pie"`                    |
-|   title    |                           标题                           |          `string`          |                       -                       |
+|   title    |                         标题文本                         |          `string`          |                       -                       |
 | titleColor |                      标题本文的颜色                      |          `string`          |                   `"#000"`                    |
 | labelColor |                    类目标签本文的颜色                    |          `string`          |     默认和与之对应的类目 body 的颜色相同      |
 | titleSize  |                标题本文的字体大小, 像素值                |          `number`          | 一般无需提供,默认根据容器尺寸自动计算字体大小 |
 | labelSize  |              类目标签本文的字体大小, 像素值              |          `number`          | 一般无需提供,默认根据容器尺寸自动计算字体大小 |
 |    data    |                        类目的数据                        |          `Array`           |                       -                       |
-|   option   |       `echarts` 原生的配置对象, 用于更细粒度的配置       |          `Object`          |                       -                       |
+|   option   |      **echarts** 原生的配置对象, 用于更细粒度的配置      |          `Object`          |                       -                       |
 
 ::: tip 关于 data 属性
-**PieChart** 通过 `data` 来提供类目的数据，`data` 是一个包含每个类目配置对象的数组，数据格式与 [series-pie.data](https://echarts.apache.org/zh/option.html#series-pie.data) 完全相同。大多数情况下， 你不需要使用`option`，只需要配置 `data`就能实现简单的饼图效果。PieChart 内部也监听了 `data` 属性的变化，当 `data` 有变更时，会触发视图更新。
+**PieChart** 通过 `data` 来提供类目的数据，`data` 是一个包含每个类目配置对象的数组，数据格式与 [series-pie.data](https://echarts.apache.org/zh/option.html#series-pie.data) 完全相同。大多数情况下， 你不需要使用`option`，只需要配置 `data`就能实现简单的饼图效果。**PieChart** 内部也监听了 `data` 属性的变化，当 `data` 有变更时，会触发视图更新。
 :::
 
 ::: tip 注意
