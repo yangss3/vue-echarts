@@ -1,5 +1,5 @@
 ---
-home: true
+home: false
 heroImage: null
 heroText: EChartsVueCompoents
 tagline: A few ECharts components based on Vue

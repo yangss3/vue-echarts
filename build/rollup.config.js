@@ -6,16 +6,16 @@ import alias from '@rollup/plugin-alias'
 import commonjs from '@rollup/plugin-commonjs'
 import replace from '@rollup/plugin-replace'
 import babel from 'rollup-plugin-babel'
-// import resolve from '@rollup/plugin-node-resolve'
 import { terser } from 'rollup-plugin-terser'
 import minimist from 'minimist'
+import resolve from '@rollup/plugin-node-resolve'
 
 // Get browserslist config and remove ie from es build targets
 const esbrowserslist = fs
   .readFileSync('./.browserslistrc')
   .toString()
   .split('\n')
-  .filter((entry) => entry && entry.substring(0, 2) !== 'ie')
+  .filter(entry => entry && entry.substring(0, 2) !== 'ie')
 
 const argv = minimist(process.argv.slice(2))
 
@@ -28,34 +28,40 @@ const baseConfig = {
       alias({
         resolve: ['.js', '.jsx', '.ts', '.tsx', '.vue'],
         entries: {
-          '@': path.resolve(projectRoot, 'src'),
-        },
-      }),
+          '@': path.resolve(projectRoot, 'src')
+        }
+      })
     ],
     replace: {
       'process.env.NODE_ENV': JSON.stringify('production'),
-      'process.env.ES_BUILD': JSON.stringify('false'),
+      'process.env.ES_BUILD': JSON.stringify('false')
     },
     vue: {
       css: true,
       template: {
-        isProduction: true,
-      },
+        isProduction: true
+      }
     },
     babel: {
       exclude: 'node_modules/**',
-      extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue'],
-    },
-  },
+      extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue']
+    }
+  }
 }
 
 // ESM/UMD/IIFE shared settings: externals
 // Refer to https://rollupjs.org/guide/en/#warning-treating-module-as-external-dependency
+
 const external = [
   // list external dependencies, exactly the way it is written in the import statement.
-  // eg. 'jquery'
   'vue',
   'echarts',
+  'echarts-liquidfill',
+  'lodash/debounce',
+  'lodash/merge',
+  'lodash/multiply',
+  'lodash/cloneDeep',
+  'color'
 ]
 
 // UMD/IIFE shared settings: output.globals
@@ -64,8 +70,7 @@ const globals = {
   // Provide global variable names to replace your external imports
   // eg. jquery: '$'
   vue: 'Vue',
-  echarts: 'echarts',
-  color: 'Color',
+  echarts: 'echarts'
 }
 
 // Customize configs for individual targets
@@ -75,14 +80,14 @@ if (!argv.format || argv.format === 'es') {
     ...baseConfig,
     external,
     output: {
-      file: 'lib/echarts-vue-components.esm.js',
+      file: 'lib/echarts-comps.esm.js',
       format: 'esm',
-      exports: 'named',
+      exports: 'named'
     },
     plugins: [
       replace({
         ...baseConfig.plugins.replace,
-        'process.env.ES_BUILD': JSON.stringify('true'),
+        'process.env.ES_BUILD': JSON.stringify('true')
       }),
       ...baseConfig.plugins.preVue,
       vue(baseConfig.plugins.vue),
@@ -92,13 +97,13 @@ if (!argv.format || argv.format === 'es') {
           [
             '@babel/preset-env',
             {
-              targets: esbrowserslist,
-            },
-          ],
-        ],
+              targets: esbrowserslist
+            }
+          ]
+        ]
       }),
-      commonjs(),
-    ],
+      commonjs()
+    ]
   }
   buildFormats.push(esConfig)
 }
@@ -109,11 +114,11 @@ if (!argv.format || argv.format === 'cjs') {
     external,
     output: {
       compact: true,
-      file: 'lib/echarts-vue-components.ssr.js',
+      file: 'lib/echarts-comps.ssr.js',
       format: 'cjs',
-      name: 'Demo',
-      exports: 'named',
-      globals,
+      name: 'EchartsComps',
+      exports: 'named'
+      // globals
     },
     plugins: [
       replace(baseConfig.plugins.replace),
@@ -122,12 +127,12 @@ if (!argv.format || argv.format === 'cjs') {
         ...baseConfig.plugins.vue,
         template: {
           ...baseConfig.plugins.vue.template,
-          optimizeSSR: true,
-        },
+          optimizeSSR: true
+        }
       }),
       babel(baseConfig.plugins.babel),
-      commonjs(),
-    ],
+      commonjs()
+    ]
   }
   buildFormats.push(umdConfig)
 }
@@ -135,14 +140,14 @@ if (!argv.format || argv.format === 'cjs') {
 if (!argv.format || argv.format === 'iife') {
   const unpkgConfig = {
     ...baseConfig,
-    external,
+    external: ['vue', 'echarts', 'echarts-liquidfill'],
     output: {
       compact: true,
-      file: 'lib/echarts-vue-components.min.js',
+      file: 'lib/echarts-comps.min.js',
       format: 'iife',
-      name: 'Demo',
+      name: 'EchartsComps',
       exports: 'named',
-      globals,
+      globals
     },
     plugins: [
       replace(baseConfig.plugins.replace),
@@ -150,13 +155,18 @@ if (!argv.format || argv.format === 'iife') {
       vue(baseConfig.plugins.vue),
       babel(baseConfig.plugins.babel),
       commonjs(),
-
       terser({
         output: {
-          ecma: 5,
-        },
+          ecma: 5
+        }
       }),
-    ],
+      resolve({
+        // pass custom options to the resolve plugin
+        customResolveOptions: {
+          moduleDirectory: 'node_modules'
+        }
+      })
+    ]
   }
   buildFormats.push(unpkgConfig)
 }
