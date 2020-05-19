@@ -10,12 +10,22 @@
 
 ## Install
 
-### 通过 npm 安装
+`echarts-vue-components` 将 `echarts` 作为外部依赖, 所以需要同时引入 `echarts`
 
-`echarts-vue-components` 本身没有包含 `echarts`, 所以需要同时安装 `echarts`
+### 通过 bundler 使用
 
 ```bash
-npm install echarts @yangss/echarts-vue-components --save
+# npm
+npm install echarts @yangss/echarts-vue-components
+# yarn
+yarn add echarts @yangss/echarts-vue-components
+```
+
+### 通过 CDN 引入
+
+```html
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.7.0/echarts.min.js"></script>
+<script src="https://unpkg.com/@yangss/echarts-vue-components/lib/echarts-vue-components.min.js"></script>
 ```
 
 ## Usage
@@ -23,21 +33,21 @@ npm install echarts @yangss/echarts-vue-components --save
 ### 全局注册
 
 ```js
-import Vue from 'vue'
-import echartsComps from '@yangss/echarts-vue-components'
-
-Vue.use(echartsComponents)
+import Vue from 'vue';
+import echartsComponents from '@yangss/echarts-vue-components';
+// 全局注册所有组件
+Vue.use(echartsComponents);
 ```
 
 ### 局部引入
 
 ```js
-import { BaseChart, GridChart } from '@yangss/echarts-vue-components'
+import { BaseChart, GridChart } from '@yangss/echarts-vue-components';
 
 export default {
   components: {
     BaseChart,
-    GridChart
-  }
-}
+    GridChart,
+  },
+};
 ```
