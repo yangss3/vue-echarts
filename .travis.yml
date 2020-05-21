@@ -4,11 +4,9 @@ install:
   - yarn install # npm ci
 jobs:
   include:
-    - stage: 'build docs'
+    - stage: 'deploy docs'
       script:
         - npm run docs:build
-    - stage: 'deploy docs'
-      script: skip
       deploy:
         provider: pages
         # skip_cleanup: true
