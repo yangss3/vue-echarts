@@ -1,6 +1,6 @@
 module.exports = {
   base: '/echarts-vue-components/',
-  title: 'echarts-vue-components',
+  title: 'EchartsVueComponents',
   description: 'A few simple chart components based on ECharts and Vue ',
   themeConfig: {
     nav: [
