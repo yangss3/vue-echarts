@@ -2,9 +2,12 @@ language: node_js
 node_js: lts/*
 install:
   - yarn install # npm ci
+env:
+  - DEPLOY = docs
 jobs:
   include:
-    - stage: 'deploy docs'
+    - name: 'deploy docs'
+      if: $DEPLOY = docs
       script:
         - npm run docs:build
       deploy:
@@ -15,3 +18,14 @@ jobs:
         keep_history: true
         on:
           branch: master
+    - name: 'npm release'
+      if: $DEPLOY = npm
+      script:
+        - npm run build
+      deploy:
+        provider: npm
+        skip_cleanup: true
+        email: yss_2016@outlook.com
+        api_key: $NPM_AUTH_TOKEN
+        on:
+          tags: true

@@ -58,5 +58,8 @@
     "type": "git",
     "url": "https://github.com/yangss3/echarts-vue-components.git"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "homepage": "https://github.com/yangss3/echarts-vue-components"
 }
