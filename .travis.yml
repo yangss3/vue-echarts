@@ -2,12 +2,12 @@ language: node_js
 node_js: lts/*
 install:
   - yarn install # npm ci
-env:
-  - DEPLOY = docs
+# env:
+#   - DEPLOY = docs
 jobs:
   include:
     - name: 'deploy docs'
-      if: $DEPLOY = docs
+      # if: $DEPLOY = docs
       script:
         - npm run docs:build
       deploy:
