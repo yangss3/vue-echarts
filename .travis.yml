@@ -1,12 +1,18 @@
+language: node_js
+node_js: lts/*
 install:
   - yarn install # npm ci
 jobs:
   include:
     - name: build docs
-      language: node_js
-      node_js: lts/*
       script:
         - npm run docs:build
+    - name: build package
+      script:
+        - npm run build
+        - npm version patch
+        - npm publish --acess public
+
 deploy:
   provider: pages
   skip_cleanup: true
