@@ -2,7 +2,7 @@
 home: true
 heroImage: null
 heroText: EChartsVueCompoents
-tagline: 几个基于 Vue 的 Echarts 图表组件
+tagline: 几个基于 Vue 的 Echarts 图表组件!
 actionText: Get Started →
 actionLink: /guide.md
 # features:
