@@ -8,7 +8,6 @@ env:
 jobs:
   include:
     - name: 'deploy docs'
-      if: $DEPLOY=docs
       script:
         - npm run docs:build
       deploy:
@@ -20,7 +19,6 @@ jobs:
         on:
           branch: master
     - name: 'npm release'
-      if: $DEPLOY=npm
       script:
         - npm run build
       deploy:
