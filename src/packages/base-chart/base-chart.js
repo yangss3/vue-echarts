@@ -18,6 +18,10 @@ export default {
     option: {
       type: Object,
       default: () => ({})
+    },
+    watchOption: {
+      type: Boolean,
+      default: true
     }
   },
 
@@ -33,7 +37,9 @@ export default {
     this.$watch(
       'option',
       function(val, oldVal) {
-        this.renderChart(val != oldVal)
+        if (this.watchOption) {
+          this.renderChart(val != oldVal)
+        }
       },
       { deep: true }
     )

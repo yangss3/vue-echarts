@@ -50,6 +50,11 @@ export default {
       default: () => ({})
     },
 
+    watchOption: {
+      type: Boolean,
+      default: true
+    },
+
     // 同时展示的类目数，当类目总数超过这个值时，类目会滚动显示
     // 不传值时，默认同时展示所有类目
     size: Number,
@@ -84,8 +89,9 @@ export default {
   watch: {
     option: {
       handler(val, oldVal) {
-        console.log('watch')
-        this.renderChart(val != oldVal)
+        if (this.watchOption) {
+          this.renderChart(val != oldVal)
+        }
       },
       deep: true
     }
@@ -327,7 +333,7 @@ export default {
             },
             itemStyle: {
               color: barGradient ? gradientColor : color,
-              barBorderRadius: this.round && !this.stack ? [50, 50, 0, 0] : 0
+              barBorderRadius: this.round && !this.stack ? [100, 100, 0, 0] : 0
             }
           }
     }

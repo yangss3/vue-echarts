@@ -21,17 +21,22 @@ export default {
       type: Array,
       default: () => []
     },
-
     option: {
       type: Object,
       default: () => ({})
+    },
+    watchOption: {
+      type: Boolean,
+      default: true
     }
   },
 
   watch: {
     option: {
       handler(val, oldVal) {
-        this.renderChart(val != oldVal)
+        if (this.watchOption) {
+          this.renderChart(val != oldVal)
+        }
       },
       deep: true
     },
