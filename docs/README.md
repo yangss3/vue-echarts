@@ -1,7 +1,7 @@
 ---
 home: true
 heroImage: null
-heroText: EChartsVueCompoents
+heroText: EChartsVueCompoents 文档
 tagline: 几个基于 Vue 的 Echarts 图表组件
 actionText: Get Started →
 actionLink: /guide.md

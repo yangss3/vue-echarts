@@ -3,30 +3,16 @@ node_js: lts/*
 install:
   - yarn install # npm ci
 cache: yarn
-env:
-  - DEPLOY=docs
 jobs:
   include:
     - name: 'deploy docs'
-      env: DEPLOY=docs
       script:
         - npm run docs:build
       deploy:
         provider: pages
         skip_cleanup: true
         local_dir: docs/.vuepress/dist
-        github_token: $GITHUB_TOKEN # A token generated on GitHub allowing Travis to push code on you repository. Set in the Travis settings page of your repository, as a secure variable
+        github_token: $GITHUB_TOKEN
         keep_history: true
         on:
           branch: master
-    - name: 'npm release'
-      env: DEPLOY=npm
-      script:
-        - npm run build
-      deploy:
-        provider: npm
-        skip_cleanup: true
-        email: yss_2016@outlook.com
-        api_key: $NPM_AUTH_TOKEN
-        on:
-          tags: true
