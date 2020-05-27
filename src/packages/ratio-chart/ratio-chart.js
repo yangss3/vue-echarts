@@ -34,6 +34,12 @@ export default {
     }
   },
 
+  watch: {
+    value() {
+      this.renderChart()
+    }
+  },
+
   methods: {
     createOption() {
       const value = Number.parseFloat(this.value)

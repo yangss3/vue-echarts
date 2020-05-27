@@ -88,6 +88,15 @@ export default {
     }
   },
 
+  watch: {
+    series: {
+      handler(val, oldVal) {
+        this.renderChart(val != oldVal)
+      },
+      deep: true
+    }
+  },
+
   methods: {
     createOption() {
       const showTitle = !!this.title
@@ -97,24 +106,24 @@ export default {
         color = color || this.$echartsColorSet[index % this.$echartsColorSet.length]
         return this.gradient
           ? {
-            type: 'linear',
-            x: 0,
-            y: 0,
-            x2: 1,
-            y2: 1,
-            colorStops: [
-              {
-                offset: 0,
-                color: color // 0% 处的颜色
-              },
-              {
-                offset: 1,
-                color: Color(color)
-                  .lighten(0.2)
-                  .toString() // 100% 处的颜色
-              }
-            ]
-          }
+              type: 'linear',
+              x: 0,
+              y: 0,
+              x2: 1,
+              y2: 1,
+              colorStops: [
+                {
+                  offset: 0,
+                  color: color // 0% 处的颜色
+                },
+                {
+                  offset: 1,
+                  color: Color(color)
+                    .lighten(0.2)
+                    .toString() // 100% 处的颜色
+                }
+              ]
+            }
           : color
       }
 
@@ -127,8 +136,8 @@ export default {
             color: !this.background
               ? 'transparent'
               : typeof this.background === 'string'
-                ? this.background
-                : Color(color)
+              ? this.background
+              : Color(color)
                   .fade(0.8)
                   .toString(),
             borderColor: Color(color)
@@ -143,7 +152,7 @@ export default {
       let grid, xAxis, yAxis, series
       if (this.type === 'two-way') {
         const gridCommon = {
-          top: (showTitle || showLegend) ? this.gridTop : '5%',
+          top: showTitle || showLegend ? this.gridTop : '5%',
           bottom: '4%',
           containLabel: true
         }
