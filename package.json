@@ -54,6 +54,10 @@
     "vue",
     "components"
   ],
+  "author": {
+    "name": "Nicholas Yang",
+    "email": "nicholasy333@gmail.com"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/yangss3/echarts-vue-components.git"
@@ -61,5 +65,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "homepage": "https://github.com/yangss3/echarts-vue-components"
+  "homepage": "https://yangss3.github.io/echarts-vue-components"
 }
