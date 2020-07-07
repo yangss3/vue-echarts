@@ -84,7 +84,6 @@ export default {
   watch: {
     option: {
       handler(val, oldVal) {
-        console.log('watch')
         this.renderChart(val != oldVal)
       },
       deep: true
