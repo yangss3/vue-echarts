@@ -5,12 +5,6 @@ export default {
   name: 'horizontalBarChart',
   mixins: [chartMixin],
   props: {
-    // 单向|双向
-    type: {
-      type: String,
-      default: 'one-way' // one-way | two-way
-    },
-
     // 标题
     title: String,
     // 标题字体大小
@@ -25,38 +19,14 @@ export default {
 
     // 系列数据数组
     series: {
-      type: Array,
+      type: [Object, Array],
       required: true
-    },
-
-    // 是否堆叠 仅 type === one-way 时生效
-    stack: {
-      type: Boolean,
-      default: false
     },
 
     // 是否圆角
     round: {
       type: Boolean,
       default: true
-    },
-
-    // 是否显示背景边框效果
-    border: {
-      type: Boolean,
-      default: false
-    },
-
-    // 是否显示背景色，可以设置背景颜色
-    background: {
-      type: [Boolean, String],
-      default: true
-    },
-
-    // 是否显示渐变色效果
-    gradient: {
-      type: Boolean,
-      default: false
     },
 
     // 字体的颜色
@@ -68,14 +38,14 @@ export default {
     // label, legend 字体大小
     labelSize: Number,
 
-    // type === two-way 时，调整中间 label 距离容器左边位置
+    // 两个系列数据对比时，调整中间 label 距离容器左边位置
     // 可以是的百分比或绝对像素值
     labelLeft: {
       type: [String, Number],
       default: '46%'
     },
 
-    // type === two-way 时，调整左右两边 grid 的宽度
+    // 两个系列数据对比时，调整左右两边 grid 的宽度
     // 可以是相对于容器宽度的百分比或绝对像素值
     gridWidth: {
       type: [String, Number],
@@ -83,20 +53,43 @@ export default {
     },
 
     gridTop: {
+      type: [String, Number]
+    },
+
+    gridBottom: {
       type: [String, Number],
-      default: '12%'
+      default: '-1.5%'
+    },
+
+    // 图表容器背景色
+    backgroundColor: {
+      type: String,
+      default: 'transparent'
+    },
+
+    // 柱条的宽度
+    barWidth: {
+      type: [String, Number]
     }
   },
 
   methods: {
     createOption() {
+      let tempSeries
+      if (!Array.isArray(this.series)) {
+        tempSeries = [this.series]
+      } else {
+        tempSeries = this.series
+      }
+
       const showTitle = !!this.title
-      const showLegend = this.series.some(item => !!item.name)
+      const showLegend = tempSeries.some(item => !!item.name)
       const labelSize = this.labelSize || this.contentFontSize
+
       const itemColor = (color, index) => {
-        color = color || this.$echartsColorSet[index % this.$echartsColorSet.length]
-        return this.gradient
-          ? {
+        color || this.$echartsColorSet[index % this.$echartsColorSet.length]
+        if (Array.isArray(color) && color.length > 1) {
+          return {
             type: 'linear',
             x: 0,
             y: 0,
@@ -105,48 +98,49 @@ export default {
             colorStops: [
               {
                 offset: 0,
-                color: color // 0% 处的颜色
+                color: color[0] // 0% 处的颜色
               },
               {
                 offset: 1,
-                color: Color(color)
-                  .lighten(0.2)
-                  .toString() // 100% 处的颜色
+                color: color[1] // 100% 处的颜色
               }
             ]
           }
-          : color
-      }
-
-      const backgroundConfig = (color, index) => {
-        color = color || this.$echartsColorSet[index % this.$echartsColorSet.length]
-
-        return {
-          showBackground: this.background || this.border,
-          backgroundStyle: {
-            color: !this.background
-              ? 'transparent'
-              : typeof this.background === 'string'
-                ? this.background
-                : Color(color)
-                  .fade(0.8)
-                  .toString(),
-            borderColor: Color(color)
-              .lighten(0.1)
-              .toString(),
-            borderWidth: this.border ? 1 : 0,
-            barBorderRadius: this.round ? 50 : 0
-          }
+        } else {
+          return Array.isArray(color) ? color[0] : color
         }
       }
 
-      let grid, xAxis, yAxis, series
-      if (this.type === 'two-way') {
+      const itemBgColor = (item, index) => {
+        let bgColor
+        if (item.bgColor) {
+          bgColor = item.bgColor
+        } else if (typeof item.color === 'string') {
+          bgColor = Color(item.color)
+            .fade(0.8)
+            .toString()
+        } else {
+          bgColor = Color(this.$echartsColorSet[index])
+            .fade(0.8)
+            .toString()
+        }
+
+        return bgColor
+      }
+
+      let grid,
+        xAxis,
+        yAxis,
+        series = []
+
+      if (tempSeries.length > 1) {
         const gridCommon = {
-          top: (showTitle || showLegend) ? this.gridTop : '5%',
+          top:
+            showTitle || showLegend ? this.gridTop || '12%' : this.gridTop || '5%',
           bottom: '4%',
           containLabel: true
         }
+
         grid = [
           {
             width: this.gridWidth,
@@ -181,6 +175,13 @@ export default {
             show: false
           }
         }
+
+        const yAxisCommon = {
+          axisLine: { show: false },
+          splitLine: { show: false },
+          axisTick: { show: false }
+        }
+
         xAxis = [
           {
             gridIndex: 0,
@@ -192,11 +193,6 @@ export default {
           { gridIndex: 2, ...xAxisCommon }
         ]
 
-        const yAxisCommon = {
-          axisLine: { show: false },
-          splitLine: { show: false },
-          axisTick: { show: false }
-        }
         yAxis = [
           {
             gridIndex: 0,
@@ -213,12 +209,14 @@ export default {
               fontSize: labelSize
             },
             ...yAxisCommon,
-            data: this.category.map(value => ({
-              value,
-              textStyle: {
-                align: 'center'
-              }
-            }))
+            data: this.category
+              .map(value => ({
+                value,
+                textStyle: {
+                  align: 'center'
+                }
+              }))
+              .reverse()
           },
           {
             gridIndex: 2,
@@ -228,32 +226,60 @@ export default {
           }
         ]
 
-        series = this.series.slice(0, 2).map((item, i) => {
-          return {
-            type: 'bar',
-            name: item.name,
-            xAxisIndex: i === 1 ? 2 : 0,
-            yAxisIndex: i === 1 ? 2 : 0,
-            label: {
-              show: true,
-              position: i === 0 ? 'left' : 'right',
-              color: this.color,
-              fontSize: labelSize * 0.9
+        tempSeries.slice(0, 2).forEach((item, i) => {
+          const seriesData = item.data.reverse()
+          series.push(
+            {
+              type: 'bar',
+              name: item.name,
+              barWidth: this.barWidth,
+              barMaxWidth: !this.barWidth ? 25 : undefined,
+              zlevel: 1,
+              xAxisIndex: i === 1 ? 2 : 0,
+              yAxisIndex: i === 1 ? 2 : 0,
+              label: {
+                show: false,
+                position: i === 0 ? 'left' : 'right',
+                color: this.color,
+                fontSize: labelSize * 0.9
+              },
+              itemStyle: {
+                color: itemColor(item.color, i),
+                barBorderRadius: this.round ? 50 : 0
+              },
+              data: seriesData
             },
-            itemStyle: {
-              color: itemColor(item.color, i),
-              barBorderRadius: this.round ? 50 : 0
-            },
-            ...backgroundConfig(item.color, i),
-            data: item.data
-          }
+            {
+              type: 'bar',
+              barWidth: this.barWidth,
+              barMaxWidth: !this.barWidth ? 25 : undefined,
+              barGap: '-100%',
+              xAxisIndex: i === 1 ? 2 : 0,
+              yAxisIndex: i === 1 ? 2 : 0,
+              label: {
+                show: true,
+                position: i === 0 ? 'left' : 'right',
+                color: this.color,
+                fontSize: labelSize * 0.9,
+                formatter: ({ dataIndex }) => seriesData[dataIndex]
+              },
+              itemStyle: {
+                color: itemBgColor(item, i),
+                barBorderRadius: this.round ? 50 : 0
+              },
+              data: Array(seriesData.length).fill(
+                item.maxValue || Math.max(...seriesData) * 1.06
+              )
+            }
+          )
         })
       } else {
         grid = [
           {
-            top: showTitle || showLegend ? '10%' : '5%',
-            right: '6%',
-            bottom: '2%',
+            top:
+              showTitle || showLegend ? this.gridTop || '12%' : this.gridTop || '5%',
+            bottom: this.gridBottom,
+            right: '8%',
             left: '4%',
             containLabel: true
           }
@@ -264,7 +290,7 @@ export default {
         yAxis = [
           {
             type: 'category',
-            data: this.category,
+            data: this.category.reverse(),
             axisLine: { show: false },
             splitLine: { show: false },
             axisTick: { show: false },
@@ -276,26 +302,49 @@ export default {
           }
         ]
 
-        series = this.series.map((item, i) => ({
-          type: 'bar',
-          name: item.name,
-          stack: this.stack,
-          label: {
-            show: true,
-            position: this.stack ? 'insideRight' : 'right',
-            color: this.color,
-            fontSize: labelSize * 0.9
+        const seriesData = tempSeries[0].data.reverse()
+
+        series.push(
+          {
+            type: 'bar',
+            name: tempSeries[0].name,
+            zlevel: 1,
+            barWidth: this.barWidth,
+            barMaxWidth: !this.barWidth ? 25 : undefined,
+            label: {
+              show: false
+            },
+            itemStyle: {
+              color: itemColor(tempSeries[0].color, 0),
+              barBorderRadius: this.round ? 50 : 0
+            },
+            data: seriesData
           },
-          itemStyle: {
-            color: itemColor(item.color, i),
-            barBorderRadius: this.round && !this.stack ? 50 : 0
-          },
-          ...backgroundConfig(item.color, i),
-          data: item.data
-        }))
+          {
+            type: 'bar',
+            barWidth: this.barWidth,
+            barMaxWidth: !this.barWidth ? 25 : undefined,
+            barGap: '-100%',
+            label: {
+              show: true,
+              position: 'right',
+              color: this.color,
+              fontSize: labelSize * 0.9,
+              formatter: ({ dataIndex }) => seriesData[dataIndex]
+            },
+            itemStyle: {
+              color: itemBgColor(tempSeries[0], 0),
+              barBorderRadius: this.round ? 50 : 0
+            },
+            data: Array(seriesData.length).fill(
+              tempSeries[0].maxValue || Math.max(...seriesData) * 1.06
+            )
+          }
+        )
       }
 
       return {
+        backgroundColor: this.backgroundColor,
         title: {
           show: showTitle,
           text: this.title,

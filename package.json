@@ -43,8 +43,7 @@
     "vue-template-compiler": "^2.6.11"
   },
   "peerDependencies": {
-    "echarts": "^4.7.0",
-    "vue": "^2.6.11"
+    "echarts": "^4.7.0"
   },
   "engines": {
     "node": ">=10"
