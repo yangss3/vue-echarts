@@ -73,6 +73,15 @@ export default {
     }
   },
 
+  watch: {
+    series: {
+      handler(val, oldVal) {
+        this.renderChart(val != oldVal)
+      },
+      deep: true
+    }
+  },
+
   methods: {
     createOption() {
       let tempSeries

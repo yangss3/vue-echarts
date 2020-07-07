@@ -1,6 +1,6 @@
 {
   "name": "@yangss/echarts-vue-components",
-  "version": "1.0.2",
+  "version": "1.0.7",
   "description": "A few simple chart components based on Echarts and Vue",
   "main": "lib/echarts-vue-components.ssr.js",
   "unpkg": "lib/echarts-vue-components.min.js",
@@ -53,6 +53,10 @@
     "vue",
     "components"
   ],
+  "author": {
+    "name": "Nicholas Yang",
+    "email": "nicholasy333@gmail.com"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/yangss3/echarts-vue-components.git"
@@ -60,5 +64,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "homepage": "https://github.com/yangss3/echarts-vue-components"
+  "homepage": "https://yangss3.github.io/echarts-vue-components"
 }

@@ -80,7 +80,7 @@ if (!argv.format || argv.format === 'es') {
     ...baseConfig,
     external,
     output: {
-      file: 'lib/echarts-comps.esm.js',
+      file: 'lib/echarts-vue-components.esm.js',
       format: 'esm',
       exports: 'named'
     },
@@ -114,7 +114,7 @@ if (!argv.format || argv.format === 'cjs') {
     external,
     output: {
       compact: true,
-      file: 'lib/echarts-comps.ssr.js',
+      file: 'lib/echarts-vue-components.ssr.js',
       format: 'cjs',
       name: 'EchartsComps',
       exports: 'named'
@@ -143,7 +143,7 @@ if (!argv.format || argv.format === 'iife') {
     external: ['vue', 'echarts', 'echarts-liquidfill'],
     output: {
       compact: true,
-      file: 'lib/echarts-comps.min.js',
+      file: 'lib/echarts-vue-components.min.js',
       format: 'iife',
       name: 'EchartsComps',
       exports: 'named',

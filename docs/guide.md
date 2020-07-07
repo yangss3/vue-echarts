@@ -4,13 +4,11 @@
 
 ## Why?
 
-在使用 `ECharts` 画一些简单常见的图表(例如柱状图、折线图、饼图等等)时, 经常需要去查找配置, 做重复的工作. 所以根据图表的使用的频率做了几个 Vue 组件, 意在减少编写样板代码, 不需要写很多配置就能画出一些简单的图表.
-
-<image src="./images/ratio.gif"/>
+在使用 ECharts 画一些简单的图表(例如柱状图、折线图、饼图等等)时，经常需要去查找配置，做重复的工作。 所以针对一些常见的图表做了几个 Vue 组件，意在减少样板代码的编写，快速实现简单的图表。
 
 ## Install
 
-`echarts-vue-components` 将 `echarts` 作为外部依赖, 所以需要同时引入 `echarts`
+**echarts-vue-components** 将 **echarts** 作为外部依赖, 所以需要同时引入 **echarts**.
 
 ### 通过 bundler 使用
 
@@ -33,21 +31,35 @@ yarn add echarts @yangss/echarts-vue-components
 ### 全局注册
 
 ```js
-import Vue from 'vue';
-import echartsComponents from '@yangss/echarts-vue-components';
+import Vue from 'vue'
+import echartsComponents from '@yangss/echarts-vue-components'
+
 // 全局注册所有组件
-Vue.use(echartsComponents);
+Vue.use(echartsComponents)
+
+// 同时也可设置全局的调色盘
+Vue.use(echartsComponents, {
+  colors: [
+    '#581b98',
+    '#9c1de7',
+    '#f3558e',
+    '#f3558e',
+    '#c5e3f6',
+    '#fc5c9c',
+    '#feff89'
+  ]
+})
 ```
 
-### 局部引入
+### 局部注册
 
 ```js
-import { BaseChart, GridChart } from '@yangss/echarts-vue-components';
+import { BaseChart, GridChart } from '@yangss/echarts-vue-components'
 
 export default {
   components: {
     BaseChart,
-    GridChart,
-  },
-};
+    GridChart
+  }
+}
 ```

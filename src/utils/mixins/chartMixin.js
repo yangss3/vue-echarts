@@ -21,8 +21,7 @@ export default {
     return {
       chart: null,
       titleFontSize: 18,
-      contentFontSize: 15,
-      showTitle: true
+      contentFontSize: 15
     }
   },
 
