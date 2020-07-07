@@ -236,7 +236,7 @@ export default {
         ]
 
         tempSeries.slice(0, 2).forEach((item, i) => {
-          const seriesData = item.data.reverse()
+          const seriesData = [...item.data].reverse()
           series.push(
             {
               type: 'bar',
@@ -299,7 +299,7 @@ export default {
         yAxis = [
           {
             type: 'category',
-            data: this.category.reverse(),
+            data: [...this.category].reverse(),
             axisLine: { show: false },
             splitLine: { show: false },
             axisTick: { show: false },
@@ -311,7 +311,7 @@ export default {
           }
         ]
 
-        const seriesData = tempSeries[0].data.reverse()
+        const seriesData = [...tempSeries[0].data].reverse()
 
         series.push(
           {
