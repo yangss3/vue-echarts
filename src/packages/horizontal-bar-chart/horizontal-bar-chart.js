@@ -107,11 +107,11 @@ export default {
             colorStops: [
               {
                 offset: 0,
-                color: color[0] // 0% 处的颜色
+                color: color[index === 0 ? 1 : 0] // 0% 处的颜色
               },
               {
                 offset: 1,
-                color: color[1] // 100% 处的颜色
+                color: color[index === 0 ? 0 : 1] // 100% 处的颜色
               }
             ]
           }
@@ -242,7 +242,7 @@ export default {
               type: 'bar',
               name: item.name,
               barWidth: this.barWidth,
-              barMaxWidth: !this.barWidth ? 25 : undefined,
+              barMaxWidth: !this.barWidth ? 20 : undefined,
               zlevel: 1,
               xAxisIndex: i === 1 ? 2 : 0,
               yAxisIndex: i === 1 ? 2 : 0,
@@ -261,7 +261,7 @@ export default {
             {
               type: 'bar',
               barWidth: this.barWidth,
-              barMaxWidth: !this.barWidth ? 25 : undefined,
+              barMaxWidth: !this.barWidth ? 20 : undefined,
               barGap: '-100%',
               xAxisIndex: i === 1 ? 2 : 0,
               yAxisIndex: i === 1 ? 2 : 0,
