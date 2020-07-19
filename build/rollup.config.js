@@ -59,7 +59,6 @@ const external = [
   'echarts-liquidfill',
   'lodash/debounce',
   'lodash/merge',
-  'lodash/multiply',
   'lodash/cloneDeep',
   'color'
 ]
