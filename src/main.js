@@ -15,13 +15,13 @@ const components = [
   HorizontalBarChart
 ]
 
-const install = (Vue, option = { colors }) => {
-  Vue.prototype.$echartsColorSet = option.colors
-  components.forEach(comp => Vue.use(comp))
+const install = (app, option = { colors }) => {
+  app.config.globalProperties.$echartsColorSet = option.colors
+  components.forEach(comp => app.use(comp))
 }
 
 if (window !== undefined && window.Vue) {
-  Vue.use(install)
+  window.echartsVueComps = install
 }
 
 export default install

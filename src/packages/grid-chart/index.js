@@ -1,5 +1,5 @@
 import GridChart from './grid-chart'
 
-GridChart.install = (Vue) => Vue.component(GridChart.name, GridChart)
+GridChart.install = app => app.component(GridChart.name, GridChart)
 
 export default GridChart

@@ -1,5 +1,7 @@
+import { h } from 'vue'
 import echarts from 'echarts'
 import { colors } from '@/utils/config'
+
 export default {
   name: 'baseChart',
   props: {
@@ -46,7 +48,7 @@ export default {
     this.adaptive && window.addEventListener('resize', this.chart.resize)
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     this.adaptive && window.removeEventListener('resize', this.chart.resize)
   },
 
@@ -59,7 +61,7 @@ export default {
     }
   },
 
-  render(h) {
+  render() {
     return h('div', {
       style: {
         width: this.width,

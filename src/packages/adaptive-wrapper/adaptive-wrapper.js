@@ -1,3 +1,4 @@
+import { h } from 'vue'
 import debounce from 'lodash/debounce'
 const originalStyle = {}
 let parentElement = null
@@ -24,7 +25,7 @@ export default {
     window.addEventListener('resize', this.adaptiveDebounce)
   },
 
-  beforeDestroy() {
+  beforeUnmount() {
     window.removeEventListener('resize', this.adaptiveDebounce)
     parentElement.style.overflow = originalStyle.overflow
     parentElement.style.height = originalStyle.height
@@ -38,7 +39,7 @@ export default {
     },
   },
 
-  render(h) {
+  render() {
     return h('div', [
       h(
         'div',
@@ -50,7 +51,7 @@ export default {
             transform: this.transform,
           },
         },
-        this.$slots.default
+        this.$slots.default()
       ),
     ])
   },

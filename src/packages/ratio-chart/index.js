@@ -1,5 +1,5 @@
 import RatioChart from './ratio-chart'
 
-RatioChart.install = (Vue) => Vue.component(RatioChart.name, RatioChart)
+RatioChart.install = app => app.component(RatioChart.name, RatioChart)
 
 export default RatioChart
