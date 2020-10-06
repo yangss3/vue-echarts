@@ -1,6 +1,6 @@
 {
   "name": "@yangss/echarts-vue-components",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A few simple chart components based on Echarts and Vue",
   "main": "lib/echarts-vue-components.ssr.js",
   "unpkg": "lib/echarts-vue-components.min.js",
