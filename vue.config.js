@@ -1,5 +1,7 @@
+const path = require("path");
 module.exports = {
   lintOnSave: false,
+  publicPath: "./",
   pages: {
     index: {
       entry: "examples/main.js",
@@ -11,13 +13,13 @@ module.exports = {
   chainWebpack: config => {
     config.module
       .rule("js")
-      .include.add(/packages/)
-      .end()
-      .use("babel")
-      .loader("babel-loader")
-      .tap(options => {
-        // 修改它的选项...
-        return options;
+      .include.add(path.resolve(__dirname, "packages"))
+      .end();
+
+    if (process.env.NODE_ENV === "production") {
+      config.externals({
+        echarts: "echarts"
       });
+    }
   }
 };

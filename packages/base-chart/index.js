@@ -1,5 +1,5 @@
 import BaseChart from "./base-chart";
 
-BaseChart.install = Vue => Vue.component(BaseChart.name, BaseChart);
+BaseChart.install = app => app.component(BaseChart.name, BaseChart);
 
 export default BaseChart;

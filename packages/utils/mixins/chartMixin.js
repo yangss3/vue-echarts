@@ -1,6 +1,7 @@
 import echarts from "echarts";
 import { colors } from "../config";
 import { h } from "vue";
+
 export default {
   props: {
     height: {

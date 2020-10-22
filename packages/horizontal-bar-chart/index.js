@@ -1,6 +1,6 @@
 import HorizontalBarChart from "./horizontal-bar-chart";
 
-HorizontalBarChart.install = Vue =>
-  Vue.component(HorizontalBarChart.name, HorizontalBarChart);
+HorizontalBarChart.install = app =>
+  app.component(HorizontalBarChart.name, HorizontalBarChart);
 
 export default HorizontalBarChart;

@@ -5,7 +5,7 @@
     height="400px"
     :value="0.7"
   ></ratio-chart>
-  <div style="height:100vh">
+  <div style="height:30vh">
     <grid-chart type="line" :option="option"></grid-chart>
   </div>
 </template>
