@@ -1,5 +1,5 @@
 <template>
-  <ratio-chart
+  <!-- <ratio-chart
     type="liquid"
     width="400px"
     height="400px"
@@ -7,18 +7,18 @@
   ></ratio-chart>
   <div style="height:30vh">
     <grid-chart type="line" :option="option"></grid-chart>
-  </div>
+  </div> -->
+  <base-chart :option="option" adaptive></base-chart>
 </template>
 
 <script>
 import { ref } from "vue";
 
-import { RatioChart, GridChart } from "../packages";
+import { BaseChart } from "../packages";
 export default {
   name: "App",
   components: {
-    RatioChart,
-    GridChart
+    BaseChart
   },
   setup() {
     const option = ref({
@@ -41,17 +41,26 @@ export default {
       yAxis: {
         name: "销量（万台）"
       },
+      tooltip: {
+        trigger: "axis",
+        axisPointer: {
+          type: "shadow"
+        }
+      },
       series: [
         {
           name: "苹果",
+          type: "bar",
           data: [425, 232, 432, 563, 332, 462, 684, 574, 435, 578, 674, 643]
         },
         {
           name: "华为",
+          type: "bar",
           data: [445, 332, 462, 463, 432, 422, 584, 474, 405, 599, 774, 743]
         },
         {
           name: "其它",
+          type: "bar",
           data: [725, 682, 832, 813, 762, 802, 984, 774, 675, 836, 904, 993]
         }
       ]
@@ -64,12 +73,10 @@ export default {
 </script>
 
 <style>
+* {
+  margin: 0;
+}
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  height: 100vh;
 }
 </style>

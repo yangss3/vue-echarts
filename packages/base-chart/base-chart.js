@@ -1,8 +1,9 @@
-import echarts from "echarts";
-import { h } from "vue";
-import { colors } from "../utils/config";
+import { h, onMounted, toRef, watch } from "vue";
+import useBase from "../compositions/useBase";
+import useColorSet from "../compositions/useColorSet";
+
 export default {
-  name: "baseChart",
+  name: "BaseChart",
   props: {
     height: {
       type: String,
@@ -25,47 +26,40 @@ export default {
       default: true
     }
   },
+  setup(props) {
+    const { chart } = useBase(props.adaptive);
+    const defaultColors = useColorSet();
 
-  data() {
-    return {
-      chart: null
-    };
-  },
+    function renderChart(notMerge = false) {
+      chart.value.setOption(
+        {
+          color: defaultColors,
+          ...props.option
+        },
+        notMerge
+      );
+    }
 
-  mounted() {
-    this.chart = echarts.init(this.$el);
-    this.renderChart();
-    this.$watch(
-      "option",
-      function(val, oldVal) {
-        if (this.watchOption) {
-          this.renderChart(val != oldVal);
+    watch(
+      toRef(props, "option"),
+      (val, oldVal) => {
+        if (props.watchOption) {
+          renderChart(val != oldVal);
         }
       },
       { deep: true }
     );
-    this.adaptive && window.addEventListener("resize", this.chart.resize);
-  },
 
-  beforeUnmount() {
-    this.adaptive && window.removeEventListener("resize", this.chart.resize);
-  },
-
-  methods: {
-    renderChart(notMerge = false) {
-      this.chart.setOption(
-        { color: this.$echartsColorSet || colors, ...this.option },
-        notMerge
-      );
-    }
-  },
-
-  render() {
-    return h("div", {
-      style: {
-        width: this.width,
-        height: this.height
-      }
+    onMounted(() => {
+      renderChart();
     });
+
+    return () =>
+      h("div", {
+        style: {
+          width: props.width,
+          height: props.height
+        }
+      });
   }
 };

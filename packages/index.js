@@ -1,3 +1,4 @@
+import { inject } from "vue";
 import AdaptiveWrapper from "./adaptive-wrapper";
 import BaseChart from "./base-chart";
 import GridChart from "./grid-chart";
@@ -5,7 +6,12 @@ import HorizontalBarChart from "./horizontal-bar-chart";
 import PieChart from "./pie-chart";
 import RatioChart from "./ratio-chart";
 
-function install(app) {
+import { colors } from "./utils/config";
+
+const colorSetSymbol = Symbol("colorSet");
+
+function install(app, option = { colors }) {
+  app.provide(colorSetSymbol, option.colors);
   app
     .use(AdaptiveWrapper)
     .use(BaseChart)
@@ -13,6 +19,10 @@ function install(app) {
     .use(HorizontalBarChart)
     .use(PieChart)
     .use(RatioChart);
+}
+
+function useDefaultColors() {
+  return inject(colorSetSymbol, colors);
 }
 
 if (window && window.Vue) {
@@ -27,5 +37,6 @@ export {
   GridChart,
   HorizontalBarChart,
   PieChart,
-  RatioChart
+  RatioChart,
+  useDefaultColors
 };
