@@ -12,10 +12,10 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { defineComponent, ref } from "vue";
 
 import { BaseChart } from "../packages";
-export default {
+export default defineComponent({
   name: "App",
   components: {
     BaseChart
@@ -69,7 +69,7 @@ export default {
       option
     };
   }
-};
+});
 </script>
 
 <style>
