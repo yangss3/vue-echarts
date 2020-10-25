@@ -1,10 +1,34 @@
-import chartMixin from "../utils/mixins/chartMixin";
+import useBase from "pkg/compositions/useBase";
+import useColorSet from "pkg/compositions/useColorSet";
+import { defineComponent, onMounted, PropType, watch } from "vue";
 import Color from "color";
+import { EChartOption } from "echarts";
 
-export default {
-  name: "horizontalBarChart",
-  mixins: [chartMixin],
+type SeriesItem = {
+  data: number[]; // 系列的数据
+  name?: string; // 系列名
+  color?: string | [string, string]; // 柱条的颜色，不提供会默认使用调色盘的颜色，若提供一个数组，则显示渐变色
+  bgColor?: string; // 柱条背景色，不提供默认会根据 color 的值生成
+  maxValue?: number; // 该系列数据的上限值
+};
+
+type Series = SeriesItem | SeriesItem[];
+
+export default defineComponent({
+  name: "horizontal-bar-chart",
   props: {
+    height: {
+      type: String,
+      default: "100%"
+    },
+    width: {
+      type: String,
+      default: "100%"
+    },
+    adaptive: {
+      type: Boolean,
+      default: false
+    },
     // 标题
     title: String,
     // 标题字体大小
@@ -13,13 +37,13 @@ export default {
     titleColor: String,
     // 类目数组
     category: {
-      type: Array,
+      type: Array as PropType<string[]>,
       required: true
     },
 
     // 系列数据数组
     series: {
-      type: [Object, Array],
+      type: [Object, Array] as PropType<Series>,
       required: true
     },
 
@@ -69,34 +93,38 @@ export default {
 
     // 柱条的宽度
     barWidth: {
-      type: [String, Number]
+      type: Number
     }
   },
-
-  watch: {
-    series: {
-      handler(val, oldVal) {
-        this.renderChart(val != oldVal);
+  setup(props) {
+    const { chart, renderFn, titleFontSize, contentFontSize } = useBase(props);
+    const echartsColorSet = useColorSet();
+    watch(
+      () => props.series,
+      (val, oldVal) => {
+        renderChart(val != oldVal);
       },
-      deep: true
+      { deep: true }
+    );
+
+    function renderChart(notMerge = false) {
+      chart.value.setOption(createOption(), notMerge);
     }
-  },
 
-  methods: {
-    createOption() {
-      let tempSeries;
-      if (!Array.isArray(this.series)) {
-        tempSeries = [this.series];
-      } else {
-        tempSeries = this.series;
-      }
+    function createOption() {
+      const tempSeries = !Array.isArray(props.series)
+        ? [props.series]
+        : props.series;
 
-      const showTitle = !!this.title;
+      const showTitle = !!props.title;
       const showLegend = tempSeries.some(item => !!item.name);
-      const labelSize = this.labelSize || this.contentFontSize;
+      const labelSize = props.labelSize || contentFontSize.value;
 
-      const itemColor = (color, index) => {
-        color || this.$echartsColorSet[index % this.$echartsColorSet.length];
+      const itemColor = (
+        color: string | string[] | undefined,
+        index: number
+      ) => {
+        color = color || echartsColorSet[index % echartsColorSet.length];
         if (Array.isArray(color) && color.length > 1) {
           return {
             type: "linear",
@@ -120,8 +148,8 @@ export default {
         }
       };
 
-      const itemBgColor = (item, index) => {
-        let bgColor;
+      const itemBgColor = (item: SeriesItem, index: number) => {
+        let bgColor: string;
         if (item.bgColor) {
           bgColor = item.bgColor;
         } else if (typeof item.color === "string") {
@@ -129,42 +157,41 @@ export default {
             .fade(0.8)
             .toString();
         } else {
-          bgColor = Color(this.$echartsColorSet[index])
+          bgColor = Color(echartsColorSet[index])
             .fade(0.8)
             .toString();
         }
-
         return bgColor;
       };
 
-      let grid,
-        xAxis,
-        yAxis,
-        series = [];
+      let grid: EChartOption.Grid[],
+        xAxis: EChartOption.XAxis[],
+        yAxis: EChartOption.YAxis[],
+        series: EChartOption.Series[] = [];
 
       if (tempSeries.length > 1) {
         const gridCommon = {
           top:
             showTitle || showLegend
-              ? this.gridTop || "12%"
-              : this.gridTop || "5%",
+              ? props.gridTop || "12%"
+              : props.gridTop || "5%",
           bottom: "4%",
           containLabel: true
         };
 
         grid = [
           {
-            width: this.gridWidth,
+            width: props.gridWidth,
             left: "5%",
             ...gridCommon
           },
           {
             width: "0%",
-            left: this.labelLeft,
+            left: props.labelLeft,
             ...gridCommon
           },
           {
-            width: this.gridWidth,
+            width: props.gridWidth,
             right: "5%",
             ...gridCommon
           }
@@ -185,7 +212,7 @@ export default {
           splitLine: {
             show: false
           }
-        };
+        } as EChartOption.XAxis;
 
         const yAxisCommon = {
           axisLine: { show: false },
@@ -216,11 +243,11 @@ export default {
             type: "category",
             axisLabel: {
               show: true,
-              color: this.color,
+              color: props.color,
               fontSize: labelSize
             },
             ...yAxisCommon,
-            data: this.category
+            data: props.category
               .map(value => ({
                 value,
                 textStyle: {
@@ -243,40 +270,41 @@ export default {
             {
               type: "bar",
               name: item.name,
-              barWidth: this.barWidth,
-              barMaxWidth: !this.barWidth ? 25 : undefined,
+              barWidth: props.barWidth,
+              barMaxWidth: !props.barWidth ? 25 : undefined,
               zlevel: 1,
               xAxisIndex: i === 1 ? 2 : 0,
               yAxisIndex: i === 1 ? 2 : 0,
               label: {
                 show: false,
                 position: i === 0 ? "left" : "right",
-                color: this.color,
+                color: props.color,
                 fontSize: labelSize * 0.9
               },
               itemStyle: {
-                color: itemColor(item.color, i),
-                barBorderRadius: this.round ? 50 : 0
+                color: itemColor(item.color, i) as string,
+                barBorderRadius: props.round ? 50 : 0
               },
               data: seriesData
             },
             {
               type: "bar",
-              barWidth: this.barWidth,
-              barMaxWidth: !this.barWidth ? 25 : undefined,
+              barWidth: props.barWidth,
+              barMaxWidth: !props.barWidth ? 25 : undefined,
               barGap: "-100%",
               xAxisIndex: i === 1 ? 2 : 0,
               yAxisIndex: i === 1 ? 2 : 0,
               label: {
                 show: true,
                 position: i === 0 ? "left" : "right",
-                color: this.color,
+                color: props.color,
                 fontSize: labelSize * 0.9,
-                formatter: ({ dataIndex }) => seriesData[dataIndex]
+                formatter: ({ dataIndex }: { dataIndex: number }) =>
+                  seriesData[dataIndex]
               },
               itemStyle: {
                 color: itemBgColor(item, i),
-                barBorderRadius: this.round ? 50 : 0
+                barBorderRadius: props.round ? 50 : 0
               },
               data: Array(seriesData.length).fill(
                 item.maxValue || Math.max(...seriesData) * 1.06
@@ -289,9 +317,9 @@ export default {
           {
             top:
               showTitle || showLegend
-                ? this.gridTop || "12%"
-                : this.gridTop || "5%",
-            bottom: this.gridBottom,
+                ? props.gridTop || "12%"
+                : props.gridTop || "5%",
+            bottom: props.gridBottom,
             right: "8%",
             left: "4%",
             containLabel: true
@@ -303,12 +331,12 @@ export default {
         yAxis = [
           {
             type: "category",
-            data: [...this.category].reverse(),
+            data: [...props.category].reverse(),
             axisLine: { show: false },
             splitLine: { show: false },
             axisTick: { show: false },
             axisLabel: {
-              color: this.color,
+              color: props.color,
               fontSize: labelSize,
               margin: 12
             }
@@ -322,32 +350,33 @@ export default {
             type: "bar",
             name: tempSeries[0].name,
             zlevel: 1,
-            barWidth: this.barWidth,
-            barMaxWidth: !this.barWidth ? 25 : undefined,
+            barWidth: props.barWidth,
+            barMaxWidth: !props.barWidth ? 25 : undefined,
             label: {
               show: false
             },
             itemStyle: {
-              color: itemColor(tempSeries[0].color, 0),
-              barBorderRadius: this.round ? 50 : 0
+              color: itemColor(tempSeries[0].color, 0) as string,
+              barBorderRadius: props.round ? 50 : 0
             },
             data: seriesData
           },
           {
             type: "bar",
-            barWidth: this.barWidth,
-            barMaxWidth: !this.barWidth ? 25 : undefined,
+            barWidth: props.barWidth,
+            barMaxWidth: !props.barWidth ? 25 : undefined,
             barGap: "-100%",
             label: {
               show: true,
               position: "right",
-              color: this.color,
+              color: props.color,
               fontSize: labelSize * 0.9,
-              formatter: ({ dataIndex }) => seriesData[dataIndex]
+              formatter: ({ dataIndex }: { dataIndex: number }) =>
+                seriesData[dataIndex]
             },
             itemStyle: {
               color: itemBgColor(tempSeries[0], 0),
-              barBorderRadius: this.round ? 50 : 0
+              barBorderRadius: props.round ? 50 : 0
             },
             data: Array(seriesData.length).fill(
               tempSeries[0].maxValue || Math.max(...seriesData) * 1.06
@@ -357,15 +386,15 @@ export default {
       }
 
       return {
-        backgroundColor: this.backgroundColor,
+        backgroundColor: props.backgroundColor,
         title: {
           show: showTitle,
-          text: this.title,
+          text: props.title,
           left: "3%",
           top: "3.5%",
           textStyle: {
-            fontSize: this.titleSize || this.titleFontSize,
-            color: this.titleColor || this.color
+            fontSize: props.titleSize || titleFontSize.value,
+            color: props.titleColor || props.color
           }
         },
         legend: {
@@ -374,7 +403,7 @@ export default {
           top: "3.5%",
           textStyle: {
             fontSize: labelSize,
-            color: this.color
+            color: props.color
           },
           itemWidth: labelSize * 1.5,
           itemHeight: labelSize,
@@ -386,5 +415,11 @@ export default {
         series
       };
     }
+
+    onMounted(() => {
+      renderChart();
+    });
+
+    return renderFn;
   }
-};
+});
