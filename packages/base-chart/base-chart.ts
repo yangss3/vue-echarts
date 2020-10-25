@@ -1,7 +1,7 @@
-import { defineComponent, onMounted, watch } from "vue";
+import { defineComponent, onMounted, watch, PropType } from "vue";
 import useBase from "../compositions/useBase";
 import useColorSet from "../compositions/useColorSet";
-
+import { EChartOption } from 'echarts'
 export default defineComponent({
   name: "BaseChart",
   props: {
@@ -18,7 +18,7 @@ export default defineComponent({
       default: false
     },
     option: {
-      type: Object,
+      type: Object as PropType<EChartOption>,
       default: () => ({})
     },
     watchOption: {
