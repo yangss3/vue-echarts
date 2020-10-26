@@ -1,22 +1,36 @@
-import useBase from 'pkg/compositions/useBase';
-import { computed, defineComponent, onBeforeUnmount, watch, PropType, onMounted } from 'vue';
+import useBase from "pkg/compositions/useBase";
+import {
+  computed,
+  defineComponent,
+  onBeforeUnmount,
+  watch,
+  PropType,
+  onMounted,
+  getCurrentInstance
+} from "vue";
 import cloneDeep from "lodash/cloneDeep";
 import merge from "lodash/merge";
-import { EChartOption, EChartTitleOption } from 'echarts'
-import { wrapWithArray } from 'pkg/utils/helper';
+import { EChartOption, EChartTitleOption } from "echarts";
+import { wrapWithArray } from "pkg/utils/helper";
 import Color from "color";
-import useColorSet from 'pkg/compositions/useColorSet';
+import useColorSet from "pkg/compositions/useColorSet";
 
+type Gradient =
+  | boolean
+  | {
+      line: boolean;
+      bar: boolean;
+    };
+type GridType = "line" | "bar";
+type AxisType = "xAxis" | "yAxis";
 
-type Gradient = boolean | {
-  line: boolean;
-  bar: boolean;
+interface ExternalApi {
+  $startMove: () => void;
+  $stopMove: () => void;
 }
-type GridType = 'line' | 'bar'
-type AxisType = 'xAxis' | 'yAxis'
 
 export default defineComponent({
-  name: 'gridChart',
+  name: "gridChart",
   props: {
     height: {
       type: String,
@@ -31,7 +45,7 @@ export default defineComponent({
       default: false
     },
     type: {
-      type: String as PropType<GridType>,
+      type: String as PropType<GridType>
     }, // 'line' | 'bar'
     // 标题
     title: String,
@@ -93,18 +107,13 @@ export default defineComponent({
       default: true
     }
   },
-  emits: ['move'],
+  emits: ["move"],
   setup(props, { emit }) {
+    const { chart, titleFontSize, contentFontSize, renderFn } = useBase(props);
 
-    const {
-      chart,
-      titleFontSize,
-      contentFontSize,
-      renderFn,
-    } = useBase(props)
-
-    const labelFontSize = computed(() => props.labelSize || contentFontSize.value)
-
+    const labelFontSize = computed(
+      () => props.labelSize || contentFontSize.value
+    );
 
     watch(
       () => props.option,
@@ -116,42 +125,44 @@ export default defineComponent({
       { deep: true }
     );
 
-    let timer: number
-    const ctgMap = new Map()
-    let chartOption: EChartOption
-    let categoryAxis: AxisType
-    let categoryAxisConfig: EChartOption.XAxis[] | EChartOption.YAxis[]
-    let moveable = false
+    let timer: number;
+    const ctgMap = new Map();
+    let chartOption: EChartOption;
+    let categoryAxis: AxisType;
+    let categoryAxisConfig: EChartOption.XAxis[] | EChartOption.YAxis[];
+    let moveable = false;
 
     function renderChart(notMerge = false) {
-      timer && clearInterval(timer)
-      ctgMap.clear()
+      timer && clearInterval(timer);
+      ctgMap.clear();
 
-      chartOption = cloneDeep(props.option)
-      chartOption.xAxis = wrapWithArray(chartOption.xAxis)
-      chartOption.yAxis = wrapWithArray(chartOption.yAxis)
-      chartOption.series = wrapWithArray(chartOption.series)
+      chartOption = cloneDeep(props.option);
+      chartOption.xAxis = wrapWithArray(chartOption.xAxis);
+      chartOption.yAxis = wrapWithArray(chartOption.yAxis);
+      chartOption.series = wrapWithArray(chartOption.series);
 
-      if(props.type) {
-        chartOption.series.forEach(item => { item.type = props.type })
+      if (props.type) {
+        chartOption.series.forEach(item => {
+          item.type = props.type;
+        });
       }
 
-      categoryAxis = chartOption.yAxis
-        .some( y => y.type === "category") ? "yAxis" : "xAxis";
+      categoryAxis = chartOption.yAxis.some(y => y.type === "category")
+        ? "yAxis"
+        : "xAxis";
 
-      categoryAxisConfig = categoryAxis === 'xAxis'
-        ? chartOption.xAxis
-        : chartOption.yAxis
+      categoryAxisConfig =
+        categoryAxis === "xAxis" ? chartOption.xAxis : chartOption.yAxis;
 
-      const categoryArr = categoryAxisConfig[0].data || []
+      const categoryArr = categoryAxisConfig[0].data || [];
 
       moveable = !!props.size && props.size < categoryArr.length;
       if (moveable) {
         categoryArr.forEach((ctgName, i) => ctgMap.set(ctgName, i));
 
-        const initData =(item: any) => {
-          item.__dataPool = item.data.splice(props.size!)
-        }
+        const initData = (item: any) => {
+          item.__dataPool = item.data.splice(props.size!);
+        };
 
         chartOption.series.forEach(initData);
         categoryAxisConfig.forEach(initData);
@@ -193,16 +204,17 @@ export default defineComponent({
     }
 
     function createOption() {
+      const title = chartOption.title as Exclude<
+        typeof chartOption.title,
+        EChartTitleOption[]
+      >;
+      const xAxis = chartOption.xAxis as EChartOption.XAxis[];
+      const yAxis = chartOption.yAxis as EChartOption.YAxis[];
+      const series = chartOption.series as EChartOption.Series[];
 
-      const title = chartOption.title as Exclude<typeof chartOption.title, EChartTitleOption[]>
-      const xAxis = chartOption.xAxis as EChartOption.XAxis[]
-      const yAxis = chartOption.yAxis as EChartOption.YAxis[]
-      const series = chartOption.series as EChartOption.Series[]
-
-      const showTitle = !!title
+      const showTitle = title
         ? !!title.show && !!(title.text || props.title)
-        : !!props.title
-
+        : !!props.title;
 
       const defaultConfig = {
         grid: {
@@ -247,26 +259,27 @@ export default defineComponent({
         },
 
         xAxis: xAxis.length
-          ? xAxis.map((item, i) =>
-              axisConfig("x", i, categoryAxis === "xAxis")
-            )
+          ? xAxis.map((item, i) => axisConfig("x", i, categoryAxis === "xAxis"))
           : [axisConfig("x", 0)],
 
         yAxis: yAxis.length
-          ? yAxis.map((item, i) =>
-              axisConfig("y", i, categoryAxis === "yAxis")
-            )
+          ? yAxis.map((item, i) => axisConfig("y", i, categoryAxis === "yAxis"))
           : [axisConfig("y", 0)],
 
-        series: props.type === 'line' || props.type === 'bar'
-          ? series.map((item, i) => itemConfig(props.type!, i))
-          : series.map((item, i) => itemConfig(item.type as GridType, i))
+        series:
+          props.type === "line" || props.type === "bar"
+            ? series.map((item, i) => itemConfig(props.type!, i))
+            : series.map((item, i) => itemConfig(item.type as GridType, i))
       };
 
       return merge(defaultConfig, chartOption);
     }
 
-    function axisConfig(type: 'x' | 'y', index: number, isCategoryAxis?: boolean) {
+    function axisConfig(
+      type: "x" | "y",
+      index: number,
+      isCategoryAxis?: boolean
+    ) {
       const position = {
         x: { first: "bottom", second: "top" },
         y: { first: "left", second: "right" }
@@ -275,7 +288,7 @@ export default defineComponent({
         type: isCategoryAxis ? "category" : "value",
         position: index === 0 ? position[type].first : position[type].second,
         boundaryGap: isCategoryAxis
-          ? chartOption.series!.some(item => item.type !== 'line')
+          ? chartOption.series!.some(item => item.type !== "line")
           : undefined,
         nameTextStyle: {
           color: props.color,
@@ -305,7 +318,7 @@ export default defineComponent({
       };
     }
 
-    const echartsColorSet = useColorSet()
+    const echartsColorSet = useColorSet();
 
     function itemConfig(type: GridType, index: number) {
       const color = echartsColorSet[index % echartsColorSet.length];
@@ -345,19 +358,21 @@ export default defineComponent({
               ]
       };
 
-      const lineGradient = typeof props.gradient === 'boolean'
-        ? props.gradient
-        : props.gradient.line
-      const barGradient = typeof props.gradient === 'boolean'
-        ? props.gradient
-        : props.gradient.bar
+      const lineGradient =
+        typeof props.gradient === "boolean"
+          ? props.gradient
+          : props.gradient.line;
+      const barGradient =
+        typeof props.gradient === "boolean"
+          ? props.gradient
+          : props.gradient.bar;
 
       return type === "line"
         ? {
             type: "line",
             smooth: props.smooth,
             symbol: "circle",
-            symbolSize: labelFontSize.value/1.5,
+            symbolSize: labelFontSize.value / 1.5,
             itemStyle: {
               color: color
             },
@@ -376,19 +391,27 @@ export default defineComponent({
             },
             itemStyle: {
               color: barGradient ? gradientColor : color,
-              barBorderRadius: props.round && !props.stack ? [100, 100, 0, 0] : 0
+              barBorderRadius:
+                props.round && !props.stack ? [100, 100, 0, 0] : 0
             }
           };
     }
 
     onMounted(() => {
-      renderChart()
-    })
+      renderChart();
+    });
 
     onBeforeUnmount(() => {
-      timer && clearInterval(timer)
-    })
+      timer && clearInterval(timer);
+    });
 
-    return renderFn
+    const instance = getCurrentInstance() as ReturnType<
+      typeof getCurrentInstance
+    > &
+      ExternalApi;
+    instance!.$startMove = startMove;
+    instance!.$stopMove = stopMove;
+
+    return renderFn;
   }
-})
+});
