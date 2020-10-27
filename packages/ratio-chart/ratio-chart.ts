@@ -1,18 +1,39 @@
 import "echarts-liquidfill";
-import chartMixin from "../utils/mixins/chartMixin";
-import merge from "lodash/merge";
-import { multiply } from "../utils/helper";
+import { multiply } from "pkg/utils/helper";
+import useBase from "pkg/compositions/useBase";
+import {
+  defineComponent,
+  getCurrentInstance,
+  onMounted,
+  PropType,
+  watch
+} from "vue";
 import Color from "color";
+import merge from "lodash/merge";
 
-export default {
-  name: "ratioChart",
-  mixins: [chartMixin],
+interface ExternalApi {
+  $renderChart: () => void;
+}
+
+export default defineComponent({
+  name: "ratio-chart",
   props: {
-    type: {
+    height: {
       type: String,
+      default: "100%"
+    },
+    width: {
+      type: String,
+      default: "100%"
+    },
+    adaptive: {
+      type: Boolean,
+      default: false
+    },
+    type: {
+      type: String as PropType<"liquid" | "arc" | "ring">,
       default: "ring" // liquid | arc | ring
     },
-
     color: {
       type: String,
       default: "#387adf"
@@ -22,9 +43,11 @@ export default {
       type: String,
       default: "transparent"
     },
-
     label: String,
-    value: [String, Number],
+    value: {
+      type: [String, Number],
+      required: true
+    },
     formatter: String,
     labelSize: Number,
     labelColor: String,
@@ -41,44 +64,48 @@ export default {
       default: false
     },
     gradient: {
-      type: [Boolean, Array],
+      type: [Boolean, Array] as PropType<boolean | [string, string]>,
       default: false
     }
   },
+  setup(props) {
+    const { chart, renderFn, titleFontSize, contentFontSize } = useBase(props);
 
-  watch: {
-    value() {
-      this.renderChart();
+    function renderChart(notMerge = false) {
+      chart.value.setOption(createOption());
     }
-  },
 
-  methods: {
-    createOption() {
-      const value = Number.parseFloat(this.value);
-      let series = [],
+    function createOption() {
+      const value =
+        typeof props.value === "number"
+          ? props.value
+          : Number.parseFloat(props.value);
+      let series: any[] = [],
         polarConfig = {},
         text = "";
 
-      if (this.label && !Number.isNaN(value)) {
-        text = `${this.label}\n${multiply(value, 100)}%`;
-      } else if (this.label) {
-        text = this.label;
+      if (props.label && !Number.isNaN(value)) {
+        text = `${props.label}\n${multiply(value, 100)}%`;
+      } else if (props.label) {
+        text = props.label;
       } else if (!Number.isNaN(value)) {
         text = `${multiply(value, 100)}%`;
       } else {
         text = "";
       }
 
-      if (this.type === "ring" || this.type === "arc") {
+      if (props.type === "ring" || props.type === "arc") {
         polarConfig = {
           title: {
-            text: this.formatter || text,
+            text: props.formatter || text,
             top: "middle",
             left: "center",
             textStyle: {
-              color: this.labelColor || this.color,
-              fontSize: this.labelSize || this.titleFontSize * 1.5,
-              lineHeight: this.labelSize * 1.3 || this.titleFontSize * 2
+              color: props.labelColor || props.color,
+              fontSize: props.labelSize || titleFontSize.value * 1.5,
+              lineHeight: props.labelSize
+                ? props.labelSize * 1.3
+                : titleFontSize.value * 2
             }
           },
           polar: {
@@ -120,7 +147,7 @@ export default {
         };
 
         let color;
-        if (Array.isArray(this.gradient)) {
+        if (Array.isArray(props.gradient)) {
           color = {
             type: "linear",
             x: 0,
@@ -130,15 +157,15 @@ export default {
             colorStops: [
               {
                 offset: 0,
-                color: this.gradient[0] // 0% 处的颜色
+                color: props.gradient[0] // 0% 处的颜色
               },
               {
                 offset: 1,
-                color: this.gradient[1] // 100% 处的颜色
+                color: props.gradient[1] // 100% 处的颜色
               }
             ]
           };
-        } else if (this.gradient) {
+        } else if (props.gradient) {
           color = {
             type: "linear",
             x: 0,
@@ -148,18 +175,18 @@ export default {
             colorStops: [
               {
                 offset: 0,
-                color: this.color // 0% 处的颜色
+                color: props.color // 0% 处的颜色
               },
               {
                 offset: 1,
-                color: Color(this.color)
+                color: Color(props.color)
                   .fade(0.5)
                   .toString() // 100% 处的颜色
               }
             ]
           };
         } else {
-          color = this.color;
+          color = props.color;
         }
 
         const innerRing = [
@@ -167,7 +194,7 @@ export default {
             type: "bar",
             hoverAnimation: false,
             coordinateSystem: "polar",
-            roundCap: this.round,
+            roundCap: props.round,
             barGap: "-100%",
             data: [value],
             itemStyle: {
@@ -179,14 +206,14 @@ export default {
             type: "bar",
             hoverAnimation: false,
             coordinateSystem: "polar",
-            roundCap: this.round,
+            roundCap: props.round,
             barGap: "-100%",
             data: [1],
             itemStyle: {
               color:
-                this.bgColor !== "transparent"
-                  ? this.bgColor
-                  : Color(this.color)
+                props.bgColor !== "transparent"
+                  ? props.bgColor
+                  : Color(props.color)
                       .fade(0.8)
                       .toString()
             },
@@ -194,7 +221,7 @@ export default {
           }
         ];
 
-        if (this.type === "arc") {
+        if (props.type === "arc") {
           const outerRing = [
             {
               type: "pie",
@@ -208,9 +235,9 @@ export default {
                 {
                   value: 1,
                   itemStyle: {
-                    color: Array.isArray(this.gradient)
-                      ? this.gradient[0]
-                      : this.color
+                    color: Array.isArray(props.gradient)
+                      ? props.gradient[0]
+                      : props.color
                   }
                 }
               ]
@@ -221,7 +248,7 @@ export default {
         } else {
           series = [...innerRing];
         }
-      } else if (this.type === "liquid") {
+      } else if (props.type === "liquid") {
         const step = Number((value / 5).toFixed(1));
 
         series = [
@@ -229,25 +256,27 @@ export default {
             type: "liquidFill",
             center: ["50%", "50%"],
             radius: "80%",
-            color: [this.color],
+            color: [props.color],
             label: {
-              formatter: this.formatter || text,
-              fontSize: this.labelSize || this.titleFontSize * 1.5,
-              color: this.labelColor || this.color,
-              lineHeight: this.labelSize * 1.3 || this.titleFontSize * 2
+              formatter: props.formatter || text,
+              fontSize: props.labelSize || titleFontSize.value * 1.5,
+              color: props.labelColor || props.color,
+              lineHeight: props.labelSize
+                ? props.labelSize * 1.3
+                : titleFontSize.value * 2
             },
             backgroundStyle: {
-              color: this.bgColor
+              color: props.bgColor
             },
             outline: {
-              show: this.outline,
-              borderDistance: this.contentFontSize / 3,
+              show: props.outline,
+              borderDistance: contentFontSize.value / 3,
               itemStyle: {
                 color: "none",
-                borderColor: Color(this.color)
+                borderColor: Color(props.color)
                   .darken(0.1)
                   .toString(),
-                borderWidth: this.contentFontSize / 3
+                borderWidth: contentFontSize.value / 3
               }
             },
             data: [value, value - step, value - step * 2]
@@ -256,12 +285,30 @@ export default {
       }
 
       const defaultConfig = {
-        backgroundColor: this.chartBgColor,
+        backgroundColor: props.chartBgColor,
         ...polarConfig,
         series
       };
 
-      return merge(defaultConfig, this.option);
+      return merge(defaultConfig);
     }
+
+    watch(
+      () => props.value,
+      () => renderChart()
+    );
+
+    onMounted(() => {
+      renderChart();
+    });
+
+    const instance = getCurrentInstance() as ReturnType<
+      typeof getCurrentInstance
+    > &
+      ExternalApi;
+
+    instance.$renderChart = renderChart;
+
+    return renderFn;
   }
-};
+});
