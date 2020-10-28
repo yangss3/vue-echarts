@@ -1,4 +1,4 @@
-import { inject } from "vue";
+import { inject, App } from "vue";
 import AdaptiveWrapper from "./adaptive-wrapper";
 import BaseChart from "./base-chart";
 import GridChart from "./grid-chart";
@@ -8,9 +8,9 @@ import RatioChart from "./ratio-chart";
 
 import { colors } from "./utils/config";
 
-const colorSetSymbol = Symbol("colorSet");
+const colorSetSymbol = Symbol();
 
-function install(app, option = { colors }) {
+function install(app: App, option = { colors }) {
   app.provide(colorSetSymbol, option.colors);
   app
     .use(AdaptiveWrapper)
@@ -23,6 +23,11 @@ function install(app, option = { colors }) {
 
 function useDefaultColors() {
   return inject(colorSetSymbol, colors);
+}
+
+declare namespace window {
+  const Vue: any;
+  function echartComponents(app: App, ...option: any[]): any;
 }
 
 if (window && window.Vue) {
