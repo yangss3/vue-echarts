@@ -1,24 +1,22 @@
 # echarts-vue-components
 
-## Project setup
-```
-npm install
+几个简单的基于 Vue 的 ECharts 组件。
+
+## Install
+
+**echarts-vue-components** 将 **echarts** 作为外部依赖, 需要同时引入 **echarts**.
+
+### NPM
+
+```bash
+npm install @yangss/echarts-vue-components
 ```
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+### 通过 CDN 引入
 
-### Compiles and minifies for production
+```html
+<script src="https://unpkg.com/@yangss/echarts-vue-components/lib/echarts-vue-components.umd.min.js"></script>
 ```
-npm run build
-```
+## Usage
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+详情见文档 [https://yangss3.github.io/echarts-vue-components](https://yangss3.github.io/echarts-vue-components)
