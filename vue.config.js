@@ -9,7 +9,7 @@ module.exports = {
       filename: "index.html"
     }
   },
-
+  productionSourceMap: false,
   chainWebpack: config => {
     config.resolve.alias.set("pkg", path.resolve(__dirname, "packages"));
     if (process.env.NODE_ENV === "production") {
