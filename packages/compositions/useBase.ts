@@ -1,4 +1,4 @@
-import echarts, { ECharts, EChartOption } from "echarts";
+import echarts, { ECharts } from "echarts";
 import { h, onBeforeUnmount, onMounted, Ref, ref, shallowRef } from "vue";
 
 export default (props: Record<string, any>) => {

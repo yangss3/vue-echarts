@@ -11,7 +11,7 @@ module.exports = {
   },
 
   chainWebpack: config => {
-    config.resolve.alias.set('pkg', path.resolve(__dirname, 'packages'))
+    config.resolve.alias.set("pkg", path.resolve(__dirname, "packages"));
     if (process.env.NODE_ENV === "production") {
       config.externals({
         echarts: "echarts"
