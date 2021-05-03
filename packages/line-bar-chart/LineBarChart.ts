@@ -1,35 +1,21 @@
 import {
   computed,
   defineComponent,
-  onBeforeUnmount,
   watch,
   PropType,
   onMounted,
-  ref,
-  h
 } from "vue";
 import { cloneDeep, merge } from "lodash-es";
-import * as echarts from 'echarts'
-import { ECharts, EChartsOption, LineSeriesOption, BarSeriesOption } from 'echarts'
+import { EChartsOption, LineSeriesOption, BarSeriesOption } from 'echarts'
 import { wrapWithArray } from "../utils/helper"
+import { baseProps, useChart } from '../base'
 
 type SeriesOption = LineSeriesOption | BarSeriesOption
 
 export default defineComponent({
   name: 'LineBarChart',
   props: {
-    height: {
-      type: [String, Number] as PropType<string | number>,
-      default: "100%"
-    },
-    width: {
-      type: [String, Number] as PropType<string | number>,
-      default: "100%"
-    },
-    adaptive: {
-      type: Boolean,
-      default: true
-    },
+    ...baseProps,
     theme: {
       type: String as PropType<'dark' | 'light'>,
       default: 'light'
@@ -67,27 +53,16 @@ export default defineComponent({
       type: [Boolean, Number] as PropType<boolean | number>,
       default: false
     },
-    // gradient: {
-    //   type: [Boolean, Object] as PropType<boolean | { line: boolean; bar: boolean }>,
-    //   default: false
-    // },
     // 是否显示toolbox
     showToolbox: {
       type: Boolean,
       default: false
-    },
-    // ECharts 标准配置对象
-    option: {
-      type: Object as PropType<EChartsOption>,
-      default: () => ({})
     }
   },
   setup(props) {
 
     const baseOption = computed<EChartsOption>(() => {
       const isBar = props.type === 'bar'
-      // const barGradient = props.gradient && (props.gradient === true || props.gradient.bar === true)
-      // const lineGradient = props.gradient && (props.gradient === true || props.gradient.line === true)
 
       return {
         title: {
@@ -127,40 +102,15 @@ export default defineComponent({
       }
     })
 
-    const el = ref<HTMLDivElement>()
-    let chart: ECharts
-    const resize = () => chart.resize()
-    onMounted(() => {
-      chart = echarts.init(el.value, props.theme)
-      props.adaptive && window.addEventListener("resize", resize)
-      renderChart()
-
-    })
-    onBeforeUnmount(() => {
-      props.adaptive && window.removeEventListener("resize", resize)
-    })
+    const { chart, render } = useChart(props)
+    onMounted(() => renderChart())
     watch(baseOption, renderChart)
-
     function renderChart() {
       const propOption = cloneDeep(props.option)
       propOption.yAxis = wrapWithArray(propOption.yAxis)
       propOption.series = wrapWithArray(propOption.series)
-      chart && chart.setOption(merge(baseOption.value, propOption), true)
+      chart.value && chart.value.setOption(merge(baseOption.value, propOption), true)
     }
-
-    return () => h(
-      'div',
-      {
-        ref: el,
-        style: {
-          width: typeof props.width === 'number'
-            ? `${props.width}px`
-            : props.width,
-          height: typeof props.height === 'number'
-            ? `${props.height}px`
-            : props.height
-        }
-      }
-    )
+    return render
   }
 })
