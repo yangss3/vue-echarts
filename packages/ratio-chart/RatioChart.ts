@@ -91,8 +91,8 @@ export default defineComponent({
       const textStyle = merge({
         valueSize: 30,
         titleSize: 18,
-        valueOffset: props.type === 'ring' ? 18 : '60%',
-        titleOffset: props.type === 'ring' ? -18 : '80%',
+        valueOffset: props.type === 'ring' ? 16 : '60%',
+        titleOffset: props.type === 'ring' ? -16 : '80%',
         color: props.color
       }, props.textStyle)
       return {
