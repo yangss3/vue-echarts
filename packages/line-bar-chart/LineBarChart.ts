@@ -16,23 +16,20 @@ export default defineComponent({
   name: 'LineBarChart',
   props: {
     ...baseProps,
-    theme: {
-      type: String as PropType<'dark' | 'light'>,
-      default: 'light'
-    },
+    // 类型
     type: {
-      type: String as PropType<"line" | "bar">,
+      type: String as PropType<"line" | "vertical-bar" | 'horizontal-bar'>,
       default: 'line'
     },
     // 标题
     title: String,
-    // x轴数据
-    xAxisData: {
-      type: Array as PropType<number[]>,
+    // 类目轴数据
+    category: {
+      type: Array as PropType<string[]>,
       default: () => []
     },
-    // y轴名字
-    yAxisName: String,
+    // 数值轴名字
+    valueAxisName: String,
     // 系列数据，接受标准的lineSeries和barSeries配置
     series: {
       type: [Object, Array] as PropType<SeriesOption | SeriesOption[]>,
@@ -44,26 +41,47 @@ export default defineComponent({
       default: false
     },
     // 是否给柱状图添加圆角 stack !== true 时生效
+    // type !== 'line'
     rounded: {
       type: Boolean,
       default: false
     },
     // 是否为光滑曲线
+    // type === 'line'
     smooth: {
       type: [Boolean, Number] as PropType<boolean | number>,
       default: false
     },
     // 是否显示toolbox
+    // type !== 'horizontal-bar'
     showToolbox: {
       type: Boolean,
       default: false
+    },
+    // 是否显示label
+    // type === 'horizontal-bar'
+    showLabel: {
+      type: Boolean,
+      default: false
+    },
+    // 是否显示背景条
+    // type === 'horizontal-bar'
+    showBackground: {
+      type: Boolean,
+      default: false
+    },
+    // 显示background时，类目label距离包装容器顶部的距离
+    // type === 'horizontal-bar'
+    labelTop: {
+      type: [String, Number] as PropType<string | number>,
+      default: '25%'
     }
   },
   setup(props) {
-
+    const { chart, render, contentWidth } = useChart(props)
     const baseOption = computed<EChartsOption>(() => {
-      const isBar = props.type === 'bar'
-
+      const isBar = props.type !== 'line'
+      const isHorizontal = props.type === 'horizontal-bar'
       return {
         title: {
           text: props.title
@@ -73,7 +91,7 @@ export default defineComponent({
           trigger: 'axis'
         },
         toolbox: {
-          show: props.showToolbox,
+          show: props.showToolbox && !isHorizontal,
           feature: {
             dataZoom: {},
             magicType: {type: ['line', 'bar', 'stack']},
@@ -81,32 +99,61 @@ export default defineComponent({
             saveAsImage: {}
           }
         },
-        xAxis: {
+        xAxis: isHorizontal
+          ? [{
+            show: !props.showLabel,
+            type: 'value',
+            name: props.valueAxisName
+          }]
+          : [{
           type: 'category',
           boundaryGap: isBar,
-          data: props.xAxisData,
-        },
-        yAxis: [{
+          data: props.category,
+        }],
+        yAxis: isHorizontal
+          ? [{
+            type: 'category',
+            data: props.category,
+          }]
+          : [{
           type: 'value',
-          name: props.yAxisName
+          name: props.valueAxisName
         }],
         series: wrapWithArray(props.series)
           .map((item) => merge({
-            type: props.type,
+            type: isBar ? 'bar' : 'line',
             stack: props.stack ? 'stack': undefined,
+            label: {
+              show: isBar && props.showLabel,
+              position: props.stack
+                ? 'inside'
+                : isHorizontal
+                  ? props.showBackground
+                    ? [contentWidth.value + 5, props.labelTop]
+                    : 'right'
+                  : 'top'
+            },
             smooth: props.smooth && !isBar ? props.smooth : undefined,
-            itemStyle: (isBar && !props.stack)
-              ? { borderRadius: props.rounded ? [100,100,0,0] : 0 }
-              : undefined
+            itemStyle: {
+              borderRadius: isBar && !props.stack && props.rounded
+                ? isHorizontal
+                  ? [0, 100, 100, 0]
+                  : [100, 100, 0, 0]
+                : 0
+            },
+            showBackground: isHorizontal && props.showBackground,
+            backgroundStyle: {
+              borderRadius: !props.stack && props.rounded ? [0, 100, 100, 0] : 0
+            }
           }, item))
       }
     })
 
-    const { chart, render } = useChart(props)
     onMounted(() => renderChart())
     watch(baseOption, renderChart)
     function renderChart() {
       const propOption = cloneDeep(props.option)
+      propOption.xAxis = wrapWithArray(propOption.xAxis)
       propOption.yAxis = wrapWithArray(propOption.yAxis)
       propOption.series = wrapWithArray(propOption.series)
       chart.value && chart.value.setOption(merge(baseOption.value, propOption), true)
