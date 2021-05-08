@@ -25,7 +25,7 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
-    // 是否显示label
+    // 是否隐藏label
     hideLabel: {
       type: Boolean,
       default: false

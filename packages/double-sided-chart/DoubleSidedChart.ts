@@ -35,11 +35,6 @@ export default defineComponent({
       type: [Boolean, String] as PropType<boolean | string>,
       default: false
     },
-    // 显示background时，类目label距离包装容器顶部的距离
-    labelTop: {
-      type: [String, Number] as PropType<string | number>,
-      default: '25%'
-    },
     // bar的宽度
     barWidth: {
       type: Number,
