@@ -41,7 +41,7 @@ export function useChart(props: any) {
         : left
       const rightWidth = typeof right === 'string'
         ? width * Number.parseFloat(right) / 100
-        : left
+        : right
       contentWidth.value = width - leftWidth - rightWidth
     }
   }
