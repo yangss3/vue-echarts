@@ -15,6 +15,7 @@ export default defineConfig({
       // into your library
       external: ['vue', 'echarts'],
       output: {
+        dir: 'lib',
         // Provide global variables to use in the UMD build
         // for externalized deps
         globals: {

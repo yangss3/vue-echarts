@@ -3,13 +3,15 @@
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
+    "declaration": true,
+    "outDir": "es",
     "strict": true,
     "jsx": "preserve",
-    "sourceMap": true,
+    "sourceMap": false,
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
     "types": ["vite/client"]
   },
-  "include": ["example/**/*.ts", "example/**/*.d.ts", "example/**/*.tsx", "example/**/*.vue", "packages/**/*.ts"]
+  "include": ["packages/**/*.ts"]
 }
