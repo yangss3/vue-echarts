@@ -1,0 +1,87 @@
+{
+	"base-chart": {
+		"attributes": [
+			"width",
+			"height",
+			"adaptive",
+			"theme",
+			"option"
+		],
+		"description": "base chart"
+	},
+	"line-bar-chart": {
+		"attributes": [
+			"width",
+			"height",
+			"adaptive",
+			"theme",
+			"option",
+			"type",
+			"title",
+			"category",
+			"value-axis-name",
+			"series",
+			"stack",
+			"rounded",
+			"smooth",
+			"show-toolbox",
+			"show-label",
+			"show-background",
+			"label-top"
+		],
+		"description": "line chart and bar chart"
+	},
+	"pie-chart": {
+		"attributes": [
+			"width",
+			"height",
+			"adaptive",
+			"theme",
+			"option",
+			"adaptive",
+			"type",
+			"title",
+			"series",
+			"bordered",
+			"hide-label"
+		],
+		"description": "pie chart"
+	},
+	"ratio-chart": {
+		"attributes": [
+			"width",
+			"height",
+			"adaptive",
+			"theme",
+			"type",
+			"title",
+			"radius",
+			"value",
+			"max",
+			"text-style",
+			"item-width",
+			"color",
+			"bg-color",
+			"shadow",
+			"liquid",
+			"gauge"
+		],
+		"description": "ratio chart"
+	},
+	"double-sided-chart": {
+		"attributes": [
+			"width",
+			"height",
+			"adaptive",
+			"theme",
+			"title",
+			"category",
+			"series",
+			"rounded",
+			"background",
+			"bar-width",
+			"grid"
+		],
+		"description": "double sided chart"
+	}
+}

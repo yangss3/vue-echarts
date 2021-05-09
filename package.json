@@ -50,5 +50,9 @@
     "type": "git",
     "url": "https://github.com/yangss3/vue-echarts.git"
   },
-  "homepage": "https://yangss3.github.io/vue-echarts"
+  "homepage": "https://yangss3.github.io/vue-echarts",
+  "vetur": {
+    "tags": "lib/tags.json",
+    "attributes": "lib/attributes.json"
+  }
 }

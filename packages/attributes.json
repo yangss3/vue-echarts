@@ -1,0 +1,59 @@
+{
+    "base-chart/width": {
+        "type": "string|number",
+        "description": "chart width"
+    },
+    "base-chart/height": {
+        "type": "string|number",
+        "description": "chart height"
+    },
+    "base-chart/adaptive": {
+        "type": "boolean",
+        "description": "auto resize"
+    },
+    "base-chart/theme": {
+        "type": "string",
+        "options": [
+            "light",
+            "dark"
+        ],
+        "description": "chart theme"
+    },
+    "base-chart/option": {
+        "type": "object",
+        "description": "echart option"
+    },
+    "line-bar-chart/width": {
+        "type": "string|number",
+        "description": "chart width"
+    },
+    "line-bar-chart/height": {
+        "type": "string|number",
+        "description": "chart height"
+    },
+    "line-bar-chart/adaptive": {
+        "type": "boolean",
+        "description": "auto resize"
+    },
+    "line-bar-chart/theme": {
+        "type": "string",
+        "options": [
+            "light",
+            "dark"
+        ],
+        "description": "chart theme"
+    },
+    "line-bar-chart/option": {
+        "type": "object",
+        "description": "echart option"
+    },
+		"line-bar-chart/type": {
+			"type": "string",
+			"option": [
+				"line",
+				"vertical-bar",
+				"horizontal-bar"
+			],
+			"description": "chart type "
+		}
+}
