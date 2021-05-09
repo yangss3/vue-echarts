@@ -1,6 +1,6 @@
 {
   "name": "@yangss/vue-echarts",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A few ECharts5.x components for Vue3.x",
   "module": "es/index.js",
   "types": "es/index.d.ts",
