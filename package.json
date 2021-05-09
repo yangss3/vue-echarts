@@ -1,6 +1,13 @@
 {
-  "name": "vue-echarts",
+  "name": "@yangss/vue-echarts",
   "version": "0.0.0",
+  "description": "A few ECharts5.x components for Vue3.x",
+  "main": "dist/vue-echarts.es.js",
+  "unpkg": "dist/vue-echarts.umd.js",
+  "files": [
+    "dist"
+  ],
+  "author": "Nicholas Yang",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
@@ -26,5 +33,18 @@
     "vite": "^2.1.5",
     "vitepress": "^0.13.2",
     "vue-tsc": "^0.0.24"
-  }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "echarts",
+    "vue",
+    "components"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yangss3/vue-echarts.git"
+  },
+  "homepage": "https://yangss3.github.io/vue-echarts"
 }
