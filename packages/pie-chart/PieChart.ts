@@ -15,7 +15,7 @@ export default defineComponent({
   props: {
     ...baseProps,
     type: {
-      type: String as PropType<'pie' | 'angle' | 'ring' | 'angleRing'>,
+      type: String as PropType<'pie' | 'angle' | 'ring' | 'angle-ring'>,
       default: 'pie'
     },
     // 标题
@@ -38,9 +38,9 @@ export default defineComponent({
   },
   setup(props) {
     const baseOption = computed<EChartsOption>(() => {
-      const isRing = props.type === 'ring' || props.type === 'angleRing'
-      const isAngle = props.type === 'angle' || props.type === 'angleRing'
-      const isAngleRing = props.type === 'angleRing'
+      const isRing = props.type === 'ring' || props.type === 'angle-ring'
+      const isAngle = props.type === 'angle' || props.type === 'angle-ring'
+      const isAngleRing = props.type === 'angle-ring'
       return {
         title: {
           text: props.title

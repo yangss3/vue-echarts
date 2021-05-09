@@ -7,11 +7,11 @@ import RatioChart from "./ratio-chart";
 
 function install(app: App) {
   app
-    .use(BaseChart)
-    .use(LineBarChart)
-    .use(DoubleSidedChart)
-    .use(PieChart)
-    .use(RatioChart);
+    .use(BaseChart as any)
+    .use(LineBarChart as any)
+    .use(DoubleSidedChart as any)
+    .use(PieChart as any)
+    .use(RatioChart as any);
 }
 
 declare namespace window {
