@@ -4,7 +4,6 @@
     "module": "esnext",
     "moduleResolution": "node",
     "declaration": true,
-    "outDir": "es",
     "strict": true,
     "jsx": "preserve",
     "sourceMap": false,

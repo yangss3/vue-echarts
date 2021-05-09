@@ -1,6 +1,6 @@
 {
   "name": "@yangss/vue-echarts",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A few ECharts5.x components for Vue3.x",
   "module": "dist/vue-echarts.es.js",
   "main": "dist/vue-echarts.umd.js",
@@ -10,7 +10,7 @@
   "author": "Nicholas Yang",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vue-tsc --noEmit && vite build",
     "serve": "vite preview",
     "docs:dev": "vitepress dev docs --port 4000",
     "docs:build": "vitepress build docs",
