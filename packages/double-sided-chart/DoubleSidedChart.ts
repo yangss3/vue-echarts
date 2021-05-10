@@ -52,7 +52,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const baseOption = computed<EChartsOption>(() => {
+    const baseOption = computed(() => {
       const grid = merge({
         width: '40%',
         top: '10%',
@@ -104,7 +104,8 @@ export default defineComponent({
               .map(value => ({
                 value,
                 textStyle: { align: "center" }
-              })),
+              }))
+              .reverse(),
           },
           { gridIndex: 2, type: 'category', show: false }
         ],
@@ -123,7 +124,7 @@ export default defineComponent({
               itemStyle: {
                 borderRadius: props.rounded ? 50 : 0
               }
-            }, cur))
+            }, { ...cur, data: cur.data?.reverse() }))
             if (props.background) {
               prev.push({
                 type: 'bar',
@@ -149,7 +150,7 @@ export default defineComponent({
             }
             return prev
           }, [] as any)
-      }
+      } as EChartsOption
     })
 
     const { chart, render } = useChart(props)
