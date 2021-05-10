@@ -9,9 +9,9 @@
 | :---------: | :----------------------------------------------: | :-------------------: | :------------------------------: |
 |    width    | 图表容器的宽度，可以是绝对像素值或父元素宽度的百分比 | string  | `'100%'` |
 |   height    | 图表容器的高度，可以是绝对像素值或父元素高度的百分比 | string  | `'100%'` |
-|   theme   | 图表主题，可选 'light' 或 'dark'，默认 'light' | 'light' \| 'dark'  | `'light'` |
+|   theme     | 图表主题，可选 'light' 或 'dark'，默认 'light' | 'light' \| 'dark'  | `'light'` |
 |  adaptive   | 当窗口 resize 时，是否让图表重绘以自适应窗口大小，默认自适应    | boolean | `true`  |
-|    type     | 图表类型, 默认为 line  |'line' \| 'vertical-bar' \| 'horizontal-bar'| 'line'  |
+|    type     | 图表类型 |'line' \| 'vertical-bar' \| 'horizontal-bar'|  -  |
 |    title    | 标题                                             |  string     |    -    |
 |  category   | 类目轴数据                                        |  string[]   |    -    |
 |valueAxisName| 数值轴的名称                                        |  string   |    -    |
@@ -23,7 +23,7 @@
 |  showLabel  | 是否显示柱条的 label (仅当 type 为 'horizontal-bar' 时生效) |  boolean   | `false` |
 | showBackground | 柱条是否显示背景 (仅当 type 为 'horizontal-bar' 时生效) |  boolean   | `false` |
 | labelTop | 当柱条显示背景时，柱条的 label 距离柱条包装容器顶部的距离，可以是百分比或绝对像数值 (仅当 type 为 'horizontal-bar' 时生效) |  string \| number   | `25%` |
-| option | ECharts 原生的配置对象 [EChartsOption](https://echarts.apache.org/zh/option.html)  | EChartsOption |    -     |
+| option   | ECharts 原生的配置对象 [EChartsOption](https://echarts.apache.org/zh/option.html)  | EChartsOption |    -     |
 
 
 
