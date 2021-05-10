@@ -1,6 +1,6 @@
 # Introduction
 
-几个简单的基于 Vue 的 ECharts 组件
+几个简单的基于 Vue 3 的 ECharts 5 的图表组件
 
 ## Why?
 
@@ -8,58 +8,32 @@
 
 ## Install
 
-**echarts-vue-components** 将 **echarts** 作为外部依赖, 所以需要同时引入 **echarts**.
-
-通过 bundler 使用
-
 ```bash
 # npm
-npm install echarts @yangss/echarts-vue-components
+npm install @yangss/echarts-vue-components
 # yarn
-yarn add echarts @yangss/echarts-vue-components
+yarn add @yangss/echarts-vue-components
 ```
-
-通过 CDN 引入
-
-```html
-<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.7.0/echarts.min.js"></script>
-<script src="https://unpkg.com/@yangss/echarts-vue-components/lib/echarts-vue-components.min.js"></script>
-```
-
 ## Usage
 
 全局注册
-
 ```js
-import Vue from 'vue'
-import echartsComponents from '@yangss/echarts-vue-components'
+import { createApp } from 'vue'
+import App from './App.vue'
+import VueECharts from '@yangss/vue-charts'
 
-// 全局注册所有组件
-Vue.use(echartsComponents)
-
-// 同时也可设置全局的调色盘
-Vue.use(echartsComponents, {
-  colors: [
-    '#581b98',
-    '#9c1de7',
-    '#f3558e',
-    '#f3558e',
-    '#c5e3f6',
-    '#fc5c9c',
-    '#feff89'
-  ]
-})
+createApp(App).use(VueECharts).mount('#app')
 ```
 
-局部注册
-
+按需引入
 ```js
-import { BaseChart, GridChart } from '@yangss/echarts-vue-components'
+import { BaseChart, LineBarChart } from '@yangss/vue-echarts'
 
 export default {
   components: {
     BaseChart,
     GridChart
-  }
+  },
+  // ...
 }
 ```
