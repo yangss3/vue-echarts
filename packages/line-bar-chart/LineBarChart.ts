@@ -19,7 +19,6 @@ export default defineComponent({
     // 类型
     type: {
       type: String as PropType<"line" | "vertical-bar" | 'horizontal-bar'>,
-      default: 'line'
     },
     // 标题
     title: String,
@@ -80,7 +79,8 @@ export default defineComponent({
   setup(props) {
     const { chart, render, contentWidth } = useChart(props)
     const baseOption = computed<EChartsOption>(() => {
-      const isBar = props.type !== 'line'
+      const seriesArray = wrapWithArray(props.series)
+      const hasBar = seriesArray.some(s => s.type === 'bar') || props.type === 'vertical-bar' || props.type === 'horizontal-bar'
       const isHorizontal = props.type === 'horizontal-bar'
       return {
         title: {
@@ -106,46 +106,49 @@ export default defineComponent({
             name: props.valueAxisName
           }]
           : [{
-          type: 'category',
-          boundaryGap: isBar,
-          data: props.category,
-        }],
+            type: 'category',
+            boundaryGap: hasBar,
+            data: props.category,
+          }],
         yAxis: isHorizontal
           ? [{
             type: 'category',
             data: props.category,
           }]
           : [{
-          type: 'value',
-          name: props.valueAxisName
-        }],
-        series: wrapWithArray(props.series)
-          .map((item) => merge({
-            type: isBar ? 'bar' : 'line',
-            stack: props.stack ? 'stack': undefined,
-            label: {
-              show: isBar && props.showLabel,
-              position: props.stack
-                ? 'inside'
-                : isHorizontal
-                  ? props.showBackground
-                    ? [contentWidth.value + 5, props.labelTop]
-                    : 'right'
-                  : 'top'
-            },
-            smooth: props.smooth && !isBar ? props.smooth : undefined,
-            itemStyle: {
-              borderRadius: isBar && !props.stack && props.rounded
-                ? isHorizontal
-                  ? [0, 100, 100, 0]
-                  : [100, 100, 0, 0]
-                : 0
-            },
-            showBackground: isHorizontal && props.showBackground,
-            backgroundStyle: {
-              borderRadius: !props.stack && props.rounded ? [0, 100, 100, 0] : 0
-            }
-          }, item))
+            type: 'value',
+            name: props.valueAxisName
+          }],
+        series: seriesArray
+          .map((item) => {
+            const isBar = item.type === 'bar' || props.type === 'vertical-bar' || props.type === 'horizontal-bar'
+            return merge({
+              type: isBar ? 'bar' : 'line',
+              stack: props.stack ? 'stack': undefined,
+              label: {
+                show: isBar && props.showLabel,
+                position: props.stack
+                  ? 'inside'
+                  : isHorizontal
+                    ? props.showBackground
+                      ? [contentWidth.value + 5, props.labelTop]
+                      : 'right'
+                    : 'top'
+              },
+              smooth: props.smooth && !isBar ? props.smooth : undefined,
+              itemStyle: {
+                borderRadius: isBar && !props.stack && props.rounded
+                  ? isHorizontal
+                    ? [0, 100, 100, 0]
+                    : [100, 100, 0, 0]
+                  : 0
+              },
+              showBackground: isHorizontal && props.showBackground,
+              backgroundStyle: {
+                borderRadius: !props.stack && props.rounded ? [0, 100, 100, 0] : 0
+              }
+            }, item)
+          })
       }
     })
 
