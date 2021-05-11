@@ -13,8 +13,8 @@ import { baseProps, useChart } from '../base'
 import Color from 'color'
 
 interface TextStyle {
-  titleSize?: number
-  titleOffset?: number | string
+  labelSize?: number
+  labelOffset?: number | string
   valueSize?: number
   valueOffset?: number | string
   color?: string
@@ -46,8 +46,8 @@ export default defineComponent({
     /** 文本的样式 type === 'ring' | 'gauge'
     * {
     *   valueSize?: 30,
-    *   titleSize?: 18,
-    *   titleOffset?: number | string
+    *   labelSize?: 18,
+    *   labelOffset?: number | string
     *   valueOffset?: number | string
     *   color?: props.color
     * }
@@ -90,9 +90,9 @@ export default defineComponent({
     const baseOption = computed(() => {
       const textStyle = merge({
         valueSize: 30,
-        titleSize: 18,
+        labelSize: 18,
         valueOffset: props.type === 'ring' ? 16 : '60%',
-        titleOffset: props.type === 'ring' ? -16 : '80%',
+        labelOffset: props.type === 'ring' ? -16 : '80%',
         color: props.color
       }, props.textStyle)
       return {
@@ -147,7 +147,7 @@ export default defineComponent({
               axisLabel: {
                 distance: props.itemWidth + 8,
                 color: textStyle.color,
-                fontSize: textStyle.titleSize
+                fontSize: textStyle.labelSize
               },
               splitLine: {
                 length: props.itemWidth / 2,
@@ -199,9 +199,9 @@ export default defineComponent({
               data: [{ value: props.value, name: props.title }],
               title: {
                 show: !!props.title,
-                fontSize: textStyle.titleSize,
+                fontSize: textStyle.labelSize,
                 color: textStyle.color,
-                offsetCenter: [0, textStyle.titleOffset]
+                offsetCenter: [0, textStyle.labelOffset]
               },
               detail: {
                 valueAnimation: true,
@@ -261,9 +261,9 @@ export default defineComponent({
               data: [{ value: props.value, name: props.title }],
               title: {
                 show: !!props.title,
-                fontSize: textStyle.titleSize,
+                fontSize: textStyle.labelSize,
                 color: textStyle.color,
-                offsetCenter: [0, textStyle.titleOffset]
+                offsetCenter: [0, textStyle.labelOffset]
               },
               detail: {
                 valueAnimation: true,
