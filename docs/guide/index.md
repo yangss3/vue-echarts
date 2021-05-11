@@ -1,6 +1,6 @@
 # Introduction
 
-几个简单的基于 Vue 3 的 ECharts 5 的图表组件
+几个简单的基于 Vue 3 和 ECharts 5 的图表组件。
 
 ## Why?
 
@@ -10,9 +10,9 @@
 
 ```bash
 # npm
-npm install @yangss/echarts-vue-components
+npm install @yangss/vue-echarts
 # yarn
-yarn add @yangss/echarts-vue-components
+yarn add @yangss/vue-echarts
 ```
 ## Usage
 

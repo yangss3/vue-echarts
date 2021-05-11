@@ -1,7 +1,7 @@
 module.exports = {
   base: '/vue-echarts/',
-  title: 'EChart Vue Component',
-  description: 'A few chart components base on Vue 3 and ECharts 5',
+  title: 'Vue ECharts',
+  description: 'A few ECharts components for VueJS',
   themeConfig: {
     nav: [
       { text: 'Guide', link: '/guide/' },
@@ -18,11 +18,11 @@ module.exports = {
         {
           text: 'Components',
           children: [
-            { text: 'BaseChart', link: '/guide/base-chart'},
-            { text: 'LineBarChart', link: '/guide/line-bar-chart' },
             { text: 'PieChart', link: '/guide/pie-chart' },
+            { text: 'LineBarChart', link: '/guide/line-bar-chart' },
+            { text: 'DoubleSidedChart', link: '/guide/double-sided-chart' },
             { text: 'RatioChart', link: '/guide/ratio-chart' },
-            { text: 'DoubleSidedChart', link: '/guide/double-sided-chart' }
+            { text: 'BaseChart', link: '/guide/base-chart'},
           ]
         }
       ]

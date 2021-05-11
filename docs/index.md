@@ -2,16 +2,16 @@
 home: true
 heroImage: /logo.png
 heroAlt: Logo image
-heroText: EChart Vue Component
-tagline: A few chart components base on Vue 3 and EChart 5
+heroText: Vue ECharts
+tagline: A few ECharts components for VueJS
 actionText: Get Started
 actionLink: /guide/
 features:
-  - title: ECharts 5
-    details: Minimal setup with markdown-centered project structure helps you focus on writing.
-  - title: Base on Vue 3
-    details: Enjoy the dev experience of Vue + webpack, use Vue components in markdown, and develop custom themes with Vue.
-  - title: TypeScript
-    details: VitePress generates pre-rendered static HTML for each page, and runs as an SPA once a page is loaded.
+  - title: ECharts 5 in underlying
+    details: Base on ECharts 5.
+  - title: Build-in components with Preset
+    details: Build-in preset for some common charts, pretty charts can be made with very little configuration.
+  - title: Base on Vue 3 and TypeScript
+    details: Write in Vue3's composition API and TypeScript.
 footer: Copyright © 2020-present Nicholas Yang
 ---

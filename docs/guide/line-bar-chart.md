@@ -9,20 +9,20 @@
 | :---------: | :----------------------------------------------: | :-------------------: | :------------------------------: |
 |    width    | 图表容器的宽度，可以是绝对像素值或父元素宽度的百分比 | string  | `'100%'` |
 |   height    | 图表容器的高度，可以是绝对像素值或父元素高度的百分比 | string  | `'100%'` |
-|   theme     | 图表主题，可选 'light' 或 'dark'，默认 'light' | 'light' \| 'dark'  | `'light'` |
-|  adaptive   | 当窗口 resize 时，是否让图表重绘以自适应窗口大小，默认自适应    | boolean | `true`  |
-|    type     | 图表类型 |'line' \| 'vertical-bar' \| 'horizontal-bar'|  -  |
+|   theme     | 图表颜色主题 | 'light' \| 'dark'  | `'light'` |
+|  adaptive   | 当窗口 resize 时，是否让图表自动 resize 以自适应窗口大小  | boolean | `true`  |
+|    type     | 图表类型 |'line' \| 'vertical-bar' \| 'horizontal-bar'|  `'line'`  |
 |    title    | 标题                                             |  string     |    -    |
-|  category   | 类目轴数据                                        |  string[]   |    -    |
+|  category   | 类目轴标签数据的数组                               |  string[]   |    -    |
 |valueAxisName| 数值轴的名称                                        |  string   |    -    |
 |   series    | 系列数据，接受标准的 [LineSeriesOption](https://echarts.apache.org/zh/option.html#series-line) 和 [BarSeriesOption](https://echarts.apache.org/zh/option.html#series-bar) 配置 |  (LineSeriesOption \| BarSeriesOption) \| (LineSeriesOption \| BarSeriesOption)[] |  -  |
 |    stack    | 不同系列的数据是否堆叠显示                                    |   boolean  |   `false`  |
-|    rounded  | 柱图是否显示圆角                                             |   boolean  |   `false`   |
+|    rounded  | 柱图是否显示圆角， stack 为 `true` 时不生效                                            |   boolean  |   `false`   |
 |   smooth    | 线图是否开启平滑处理，如果是 number 类型(取值范围 0 到 1)，表示平滑程度，越小表示越接近折线段，反之越平滑。设为 `true` 时相当于设为 0.5             |   boolean \| number    |   `false`  |
-| showToolbox | 是否显示 toolbox，(type 为 'line' 或 'vertical-bar' 时生效) |   boolean  |  `false` |
+| showToolbox | 是否显示 toolbox (type 为 'line' 或 'vertical-bar' 时生效) |   boolean  |  `false` |
 |  showLabel  | 是否显示柱条的 label (仅当 type 为 'horizontal-bar' 时生效) |  boolean   | `false` |
 | showBackground | 柱条是否显示背景 (仅当 type 为 'horizontal-bar' 时生效) |  boolean   | `false` |
-| labelTop | 当柱条显示背景时，柱条的 label 距离柱条包装容器顶部的距离，可以是百分比或绝对像数值 (仅当 type 为 'horizontal-bar' 时生效) |  string \| number   | `25%` |
+| labelTop | 当柱条显示背景时，柱条的 label 距离柱条包装容器顶部的距离，可以是百分比(相对于柱条容器高度)或绝对像数值。 (仅当 type 为 'horizontal-bar' 时生效) |  string \| number   | `25%` |
 | option   | ECharts 原生的配置对象 [EChartsOption](https://echarts.apache.org/zh/option.html)  | EChartsOption |    -     |
 
 

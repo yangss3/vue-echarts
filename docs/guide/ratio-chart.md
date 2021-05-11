@@ -7,26 +7,39 @@
 | :---------: | :----------------------------------------------: | :-------------------: | :------------------------------: |
 |    width    | 图表容器的宽度，可以是绝对像素值或父元素宽度的百分比 | string  | `'100%'` |
 |   height    | 图表容器的高度，可以是绝对像素值或父元素高度的百分比 | string  | `'100%'` |
-|   theme   | 图表主题，可选 'light' 或 'dark'，默认 'light' | 'light' \| 'dark'  | `'light'` |
-|  adaptive   | 当窗口 resize 时，是否让图表重绘以自适应窗口大小，默认自适应    | boolean | `true` |
+|   theme     | 图表颜色主题 | 'light' \| 'dark'  | `'light'` |
+|  adaptive   | 当窗口 resize 时，是否让图表自动 resize 以自适应窗口大小   | boolean | `true` |
 |    type     | 图表类型  | 'ring' \| 'gauge' \| 'liquid' | `'ring'`  |
-|    title    | 描述文本                                             |  string  |   -   |
-|    radius   | 圆的半径                                             |  string \| number |   `'75%'`  |
+|    title    | 描述文本                                          |  string  |   -   |
+|    radius   | 圆环(ring)、仪表盘(gauge)、水滴(liquid)的半径，可以是相对于容器高宽中较小的一项的一半的百分比或绝对像素值  |  string \| number |   `'75%'`  |
 |    value    | 值 (当 type 为 'liquid' 时，只能是 0 到 1 之间的数)     |  number |   `0`  |
 |    max      | 最大值 (type 为 'ring' 或 'gauge' 时有效)             |  number |   `1`  |
-|   textStyle | 显示文本的样式       |  { titleSize?: number; titleOffset?: number \| string; valueSize?: number; valueOffset?: number \| string; color?: string; } |  `{ titleSize: 18, titleOffset: type === 'ring' ? -16 : '80%', valueSize: 30, valueOffset: type === 'ring' ? 16 : '60%', color: color }`   |
+|   textStyle | 仪表盘刻度标签文本和描述文本的样式 (type 为 'ring' 或 'gauge' 时有效)       |  { labelSize?: number; labelOffset?: number \| string; valueSize?: number; valueOffset?: number \| string; color?: string; } |  `{ labelSize: 18, labelOffset: type === 'ring' ? -16 : '80%', valueSize: 30, valueOffset: type === 'ring' ? 16 : '60%', color: color }`   |
 | itemWidth | 进度条的宽度 (type 为 'ring' 或 'gauge' 时有效)             |  number |   `20`  |
 | color | 进度条或水滴的颜色           |  sting |   -   |
 | bgColor | 进度条或水滴的背景颜色           |  sting |   -   |
-| shadow | 进度条是否显示阴影 (type 为 'ring' 或 'gauge' 时有效)          |  boolean |   `false`   |
+| shadow | 进度条是否显示阴影效果 (type 为 'ring' 或 'gauge' 时有效)          |  boolean |   `false`   |
 | liquid | 水滴图 [liquidFill](https://github.com/ecomfe/echarts-liquidfill#readme) 的标准配置对象 (type 为 'liquid' 时有效)    |  object |   -   |
 | gauge  | 仪表盘的标准配置对象，接受标准的 [GaugeSeriesOption](https://echarts.apache.org/zh/option.html#series-gauge) 配置 (type 为 'gauge' 时有效) |  object |  -  |
 
+::: tip 关于 textStyle
+可以通过 `textStyle` 属性设置仪表盘刻度标签文本、显示数值和描述文本的样式，`type` 为 'liquid' 时无效，具体说明如下：
+```ts
+{
+  labelSize?: number  // 刻度标签文本和描述文本的字体大小
+  labelOffset?: number | string // 描述文本相对于仪表盘中心的垂直偏移距离，可以是绝对像素值或相对于仪表盘半径的百分比
+  valueSize?: number  // 数值显示文本的字体大小
+  valueOffset?: number | string // 数值显示文本相对于仪表盘中心的垂直偏移距离，可以是绝对像素值或相对于仪表盘半径的百分比
+  color?: string // 仪表盘刻度标线和标签文本、显示数值和表述文本的字体颜色，不传默认取 color 属性的值
+}
+```
+:::
+
 ::: tip 关于 liquid 和 gauge 属性
 
-LineBarChart 通过 `series` 属性接受系列数据，可以传递标准的 [LineSeriesOption](https://echarts.apache.org/zh/option.html#series-line) 和 [BarSeriesOption](https://echarts.apache.org/zh/option.html#series-bar) 来配置系列的每一个细节。
+当 `type` 为 'liquid' 时，如果默认的效果不满足你的需求， 可以通过配置 `liquid` 属性来完全控制水滴图的每个部分，它接受标准的 [liquidFill](https://github.com/ecomfe/echarts-liquidfill#readme) 配置对象。
 
-通常你不需要配置 `option` 属性就能实现简单的线图和柱图，但如果设置 LineBarChart 提供的便捷属性无法达到你想要的效果，你也可以通过配置 `option` 来实现更细粒度的控制，`option` 的配置格式与 ECharts 实例方法 `setOption` 的第一个参数完全相同，实际上，LineBarChart 在内部会将 `option` 与预设配置合并，然后传递给 `setOption` 方法。它比预设的配置具有更高的优先级。
+同样当 `type` 为 'gauge' 时，也可以通过配置 `gauge` 属性来完全定制你的仪表盘，它接受标准的 [GaugeSeriesOption](https://echarts.apache.org/zh/option.html#series-gauge) 配置。
 
 :::
 
