@@ -17,16 +17,16 @@
 |  rounded  | 柱图是否显示圆角                                             |   boolean  |   `false`   |
 | background | 柱条是否显示背景 (传 string 类型时表示具体的颜色值)|  boolean \| string   | `false` |
 | barWidth | 柱条的宽度 |  number   | `18` |
-| grid | 坐标系的配置 |  { width: string \| number; top: string \| number; bottom: string \| number; labelLeft: string \| number; }   | `{ width: '40%', top: '10%', bottom: '10%', labelLeft: '51%' }` |
+| grid | 坐标系的配置 |  { width?: string \| number; top?: string \| number; bottom?: string \| number; labelLeft?: string \| number; }   | `{ width: '40%', top: '10%', bottom: '10%', labelLeft: '51%' }` |
 
 ::: tip 关于 grid
 grid 属性用于配置左右两个坐标系的宽度，距离容器顶部和底部的距离以及中间label的位置调整，具体配置格式如下：
 ```ts
 {
-  width: string | number;  // 左右两边图表的宽度，可以是容器宽度的百分比或绝对像素值
-  top: string | number;  // 图表距离容器顶部的距离，可以是容器高度的百分比或绝对像素值
-  bottom: string | number;  // 图表距离容器底部的距离，可以是容器高度的百分比或绝对像素值
-  labelLeft: string | number; // 中间的类目轴距离容器左边的距离，可以是容器宽度的百分比或绝对像素值
+  width?: string | number;  // 左右两边图表的宽度，可以是容器宽度的百分比或绝对像素值
+  top?: string | number;  // 图表距离容器顶部的距离，可以是容器高度的百分比或绝对像素值
+  bottom?: string | number;  // 图表距离容器底部的距离，可以是容器高度的百分比或绝对像素值
+  labelLeft?: string | number; // 中间的类目轴距离容器左边的距离，可以是容器宽度的百分比或绝对像素值
 }
 ```
 :::
