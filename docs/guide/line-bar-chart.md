@@ -15,10 +15,12 @@
 |    title    | 标题                                             |  string     |    -    |
 |  category   | 类目轴标签数据的数组                               |  string[]   |    -    |
 |valueAxisName| 数值轴的名称                                        |  string   |    -    |
+| textColor   | 全局文本的颜色                                        |  string   |    `#333`    |
 |   series    | 系列数据，接受标准的 [LineSeriesOption](https://echarts.apache.org/zh/option.html#series-line) 和 [BarSeriesOption](https://echarts.apache.org/zh/option.html#series-bar) 配置 |  (LineSeriesOption \| BarSeriesOption) \| (LineSeriesOption \| BarSeriesOption)[] |  -  |
 |    stack    | 不同系列的数据是否堆叠显示                                    |   boolean  |   `false`  |
 |    rounded  | 柱图是否显示圆角， stack 为 `true` 时不生效                                            |   boolean  |   `false`   |
 |   smooth    | 线图是否开启平滑处理，如果是 number 类型(取值范围 0 到 1)，表示平滑程度，越小表示越接近折线段，反之越平滑。设为 `true` 时相当于设为 0.5             |   boolean \| number    |   `false`  |
+| barWidth |柱条的宽度，不设置时自适应 |   string \| number  |  - |
 | showToolbox | 是否显示 toolbox (type 为 'line' 或 'vertical-bar' 时生效) |   boolean  |  `false` |
 |  showLabel  | 是否显示柱条的 label (仅当 type 为 'horizontal-bar' 时生效) |  boolean   | `false` |
 | showBackground | 柱条是否显示背景 (仅当 type 为 'horizontal-bar' 时生效) |  boolean   | `false` |

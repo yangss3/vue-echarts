@@ -11,8 +11,14 @@
 |  adaptive   | 当窗口 resize 时，是否让图表自动 resize 以自适应窗口大小 | boolean | `true` |
 |    type     | 饼图的类型  |'pie' \| 'angle' \| 'ring' \| 'angle-ring'| 'pie'  |
 |    title    | 标题                                             |  string  |   -   |
+| textColor   | 全局文本的颜色                                        |  string   |    `#333`    |
 |   series    | 系列数据，接受标准的 [PieSeriesOption](https://echarts.apache.org/zh/option.html#series-pie) 配置 |  PieSeriesOption \| PieSeriesOption[] |  -  |
+| showLegend  | 是否显示 legend |   boolean   |   `false`  |
 | bordered  | 每个类目块是否显示 border  |   boolean   |   `false`  |
+| borderColor  | border 的颜色  |   string   |   `#fff`  |
+| borderRadius  | border 圆角大小  |   number   |   `8`  |
+| labelFormatter  | 标签内容格式器，具体用法请参考[series-pie.label.formatter](https://echarts.apache.org/zh/option.html#series-pie.label.formatter)  |   string \| Function   |   `{b}`  |
+|  radius  | 饼图的半径，也可以通过数组指定内径和外径 |  number \| string \| (number \| string)[]   | `['40%', '60%']` |
 |  hideLabel  | 是否隐藏 label |  boolean   | `false` |
 | option | ECharts 原生的配置对象 [EChartsOption](https://echarts.apache.org/zh/option.html)  | EChartsOption |    -     |
 
