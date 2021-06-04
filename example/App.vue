@@ -2,14 +2,14 @@
   <div style="height: 500px">
     <LineBarChart
       theme="light"
-      type="horizontal-bar"
+      type="vertical-bar"
+      text-color="red"
       smooth
       rounded
       show-label
       show-background
       title="父亲颇为请问"
       :category="['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']"
-      y-name="电量"
       :series="[
         {name: 'China', data: [12,33,22,11,24,66,33]},
         {name: 'USA', data: [12,33,22,11,24,66,33].reverse()},
@@ -32,7 +32,9 @@
     <PieChart
       bordered
       type="ring"
-      hide-label
+      show-legend
+      text-color="blue"
+      label-formatter="{b}:{c}"
       :series="{
         data: [
           {value: 1048, name: '搜索引擎'},
