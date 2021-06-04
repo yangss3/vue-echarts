@@ -19,6 +19,11 @@ export const baseProps = {
     type: String as PropType<'light' | 'dark'>,
     default: 'light'
   },
+  // 全局文本字体颜色
+  textColor: {
+    type: String,
+    default: '#333'
+  },
   // ECharts 标准配置对象
   option: {
     type: Object as PropType<EChartsOption>,

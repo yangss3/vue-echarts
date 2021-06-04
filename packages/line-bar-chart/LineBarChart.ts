@@ -57,6 +57,10 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
+    // bar 的宽度
+    barWidth: {
+      type: [Number, String] as PropType<number | string>
+    },
     // 是否显示label
     // type === 'horizontal-bar'
     showLabel: {
@@ -84,9 +88,10 @@ export default defineComponent({
       const isHorizontal = props.type === 'horizontal-bar'
       return {
         title: {
-          text: props.title
+          text: props.title,
+          textStyle: { color: props.textColor }
         },
-        legend: { show: true },
+        legend: { show: true, textStyle: { color: props.textColor } },
         tooltip: {
           trigger: 'axis'
         },
@@ -103,21 +108,29 @@ export default defineComponent({
           ? [{
             show: !props.showLabel,
             type: 'value',
-            name: props.valueAxisName
+            name: props.valueAxisName,
+            nameTextStyle: { color: props.textColor },
+            axisLabel: { color: props.textColor }
           }]
           : [{
             type: 'category',
             boundaryGap: hasBar,
             data: props.category,
+            nameTextStyle: { color: props.textColor },
+            axisLabel: { color: props.textColor }
           }],
         yAxis: isHorizontal
           ? [{
             type: 'category',
             data: props.category,
+            nameTextStyle: { color: props.textColor },
+            axisLabel: { color: props.textColor }
           }]
           : [{
             type: 'value',
-            name: props.valueAxisName
+            name: props.valueAxisName,
+            nameTextStyle: { color: props.textColor },
+            axisLabel: { color: props.textColor }
           }],
         series: seriesArray
           .map((item) => {
@@ -126,7 +139,8 @@ export default defineComponent({
               type: isBar ? 'bar' : 'line',
               stack: props.stack ? 'stack': undefined,
               label: {
-                show: isBar && props.showLabel,
+                show: props.showLabel,
+                color: props.textColor,
                 position: props.stack
                   ? 'inside'
                   : isHorizontal
@@ -135,6 +149,7 @@ export default defineComponent({
                       : 'right'
                     : 'top'
               },
+              barWidth: props.barWidth,
               smooth: props.smooth && !isBar ? props.smooth : undefined,
               itemStyle: {
                 borderRadius: isBar && !props.stack && props.rounded

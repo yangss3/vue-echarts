@@ -20,15 +20,37 @@ export default defineComponent({
     },
     // 标题
     title: String,
+    // 是否显示legend
+    showLegend: {
+      type: Boolean,
+      default: false
+    },
     // 是否显示border
     bordered: {
       type: Boolean,
       default: false
     },
+    borderColor: {
+      type: String,
+      default: '#fff'
+    },
+    borderRadius: {
+      type: Number,
+      default: 8
+    },
+    // https://echarts.apache.org/zh/option.html#series-pie.label.formatter
+    labelFormatter: {
+      type: [String, Function] as PropType<string | ((params: any) => string)>,
+      default: '{b}'
+    },
     // 是否隐藏label
     hideLabel: {
       type: Boolean,
       default: false
+    },
+    radius: {
+      type: [Number, String, Array] as PropType<string | number | (string | number)[]>,
+      default: () => ['40%', '60%']
     },
     // PieSeriesOption
     series: {
@@ -43,9 +65,10 @@ export default defineComponent({
       const isAngleRing = props.type === 'angle-ring'
       return {
         title: {
-          text: props.title
+          text: props.title,
+          textStyle: { color: props.textColor }
         },
-        legend: { show: true },
+        legend: { show: props.showLegend, textStyle: { color: props.textColor } },
         tooltip: {
           trigger: 'item'
         },
@@ -54,15 +77,21 @@ export default defineComponent({
             type: 'pie',
             roseType: isAngleRing ? 'area' : (isAngle ? 'radius' : false),
             center: ['50%', '50%'],
-            radius: isRing ? ['40%', '70%'] : isAngle ? '60%' : '55%',
+            radius: isRing 
+              ? props.radius
+              : Array.isArray(props.radius)
+                ? props.radius[1]
+                : props.radius,
             itemStyle: props.bordered ? {
-              borderRadius: props.type !== 'pie' ? 8 : 0,
+              borderRadius: props.type !== 'pie' && props.borderRadius,
               borderWidth: 2,
-              borderColor: 'white'
+              borderColor: props.borderColor
             } : undefined,
             label: {
               show: !props.hideLabel,
-              position: props.hideLabel ? 'center' : 'outside'
+              position: props.hideLabel ? 'center' : 'outside',
+              color: props.textColor,
+              formatter: props.labelFormatter
             },
             emphasis: props.hideLabel ? {
               label: {
