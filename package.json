@@ -15,6 +15,9 @@
     "docs:dev": "vitepress dev docs --port 4000",
     "docs:build": "vitepress build docs",
     "docs:serve": "vitepress serve docs",
+    "pub-patch": "npm version patch && npm run build && npm publish",
+    "pub-minor": "npm version minor && npm run build && npm publish",
+    "pub-major": "npm version major && npm run build && npm publish",
     "prepare": "husky install"
   },
   "dependencies": {
