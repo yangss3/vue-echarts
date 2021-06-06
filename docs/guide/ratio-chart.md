@@ -19,6 +19,7 @@
 | color | 进度条或水滴的颜色           |  sting |   -   |
 | bgColor | 进度条或水滴的背景颜色           |  sting |   -   |
 | shadow | 进度条是否显示阴影效果 (type 为 'ring' 或 'gauge' 时有效)          |  boolean |   `false`   |
+| gradient | 进度条设置渐变色，接受起始颜色和终止颜色组成的数组 (type 为 'ring' 或 'gauge' 时有效)          |  [string, string] |   -   |
 | liquid | 水滴图 [liquidFill](https://github.com/ecomfe/echarts-liquidfill#readme) 的标准配置对象 (type 为 'liquid' 时有效)    |  object |   -   |
 | gauge  | 仪表盘的标准配置对象，接受标准的 [GaugeSeriesOption](https://echarts.apache.org/zh/option.html#series-gauge) 配置 (type 为 'gauge' 时有效) |  object |  -  |
 

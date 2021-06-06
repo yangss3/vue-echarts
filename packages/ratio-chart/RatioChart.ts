@@ -70,6 +70,8 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
+    // 给item配置颜色渐变 [startColor, endColor]
+    // type === 'ring' | 'gauge'
     gradient: {
       type: Array as PropType<string[]>
     },
@@ -183,8 +185,8 @@ export default defineComponent({
                     ? {
                       type: 'linear',
                       x: 0,
-                      y: 0,
-                      x1: 0,
+                      y: 1,
+                      x1: 1,
                       y1: 1,
                       colorStops: [
                         { offset: 0, color: props.gradient[0] },
@@ -245,12 +247,12 @@ export default defineComponent({
                     ? {
                       type: 'linear',
                       x: 0,
-                      y: 0,
-                      x1: 0,
+                      y: 1,
+                      x1: 1,
                       y1: 1,
                       colorStops: [
-                        { offset: 0, color: props.gradient[0] },
-                        { offset: 1, color: props.gradient[1] }
+                        { offset: 0, color: props.gradient[1] },
+                        { offset: 1, color: props.gradient[0] }
                       ]
                     }
                     : props.color,
