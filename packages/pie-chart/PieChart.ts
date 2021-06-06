@@ -6,7 +6,7 @@ import {
   onMounted
 } from "vue";
 import { cloneDeep, merge } from "lodash-es"
-import { EChartsOption, PieSeriesOption } from 'echarts'
+import { EChartsOption, number, PieSeriesOption } from 'echarts'
 import { wrapWithArray } from "../utils/helper"
 import { baseProps, useChart } from '../base'
 
@@ -37,6 +37,10 @@ export default defineComponent({
     borderRadius: {
       type: Number,
       default: 8
+    },
+    borderWidth: {
+      type: Number,
+      default: 2
     },
     // https://echarts.apache.org/zh/option.html#series-pie.label.formatter
     labelFormatter: {
@@ -83,8 +87,8 @@ export default defineComponent({
                 ? props.radius[1]
                 : props.radius,
             itemStyle: props.bordered ? {
-              borderRadius: props.type !== 'pie' && props.borderRadius,
-              borderWidth: 2,
+              borderRadius: props.borderRadius,
+              borderWidth: props.borderWidth,
               borderColor: props.borderColor
             } : undefined,
             label: {

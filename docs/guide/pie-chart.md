@@ -17,6 +17,7 @@
 | bordered  | 每个类目块是否显示 border  |   boolean   |   `false`  |
 | borderColor  | border 的颜色  |   string   |   `#fff`  |
 | borderRadius  | border 圆角大小  |   number   |   `8`  |
+| borderWidth  | border 的宽度  |   number   |   `2`  |
 | labelFormatter  | 标签内容格式器，具体用法请参考[series-pie.label.formatter](https://echarts.apache.org/zh/option.html#series-pie.label.formatter)  |   string \| Function   |   `{b}`  |
 |  radius  | 饼图的半径，也可以通过数组指定内径和外径 |  number \| string \| (number \| string)[]   | `['40%', '60%']` |
 |  hideLabel  | 是否隐藏 label |  boolean   | `false` |
