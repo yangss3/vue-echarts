@@ -25,6 +25,10 @@ export default defineComponent({
       type: Array as PropType<BarSeriesOption[]>,
       default: () => []
     },
+    // 左右两边柱条的颜色[leftColor, rightColor]
+    colors: {
+      type: Array as PropType<string[]>
+    },
     // 是否给柱状图添加圆角 stack !== true 时生效
     rounded: {
       type: Boolean,
@@ -61,9 +65,10 @@ export default defineComponent({
       }, props.grid)
       return {
         title: {
-          text: props.title
+          text: props.title,
+          textStyle: { color: props.textColor }
         },
-        legend: { show: true },
+        legend: { show: true, textStyle: { color: props.textColor} },
         tooltip: {
           trigger: 'axis'
         },
@@ -100,6 +105,7 @@ export default defineComponent({
             axisLine: { show: false },
             splitLine: { show: false },
             axisTick: { show: false },
+            axisLabel: { color: props.textColor },
             data: props.category
               .map(value => ({
                 value,
@@ -120,9 +126,11 @@ export default defineComponent({
               label: {
                 show: !props.background,
                 position: i === 0 ? 'left' : 'right',
+                color: props.textColor
               },
               itemStyle: {
-                borderRadius: props.rounded ? 50 : 0
+                borderRadius: props.rounded ? 50 : 0,
+                color: Array.isArray(props.colors) ? props.colors[i] : undefined
               }
             }, { ...cur, data: cur.data?.reverse() }))
             if (props.background) {
@@ -137,7 +145,8 @@ export default defineComponent({
                   show: true,
                   position: i === 0 ? 'left' : 'right',
                   formatter: ({ dataIndex }: { dataIndex: number }) =>
-                    cur.data![dataIndex]
+                    cur.data![dataIndex],
+                  color: props.textColor
                 },
                 itemStyle: {
                   color: props.background === true

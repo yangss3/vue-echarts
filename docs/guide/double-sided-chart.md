@@ -14,6 +14,8 @@
 |    title    | 标题                                             |  string     |    -    |
 |  category   | 类目轴标签数据的数组                                      |  string[]   |    -    |
 |   series    | 系列数据，接受标准的 [BarSeriesOption](https://echarts.apache.org/zh/option.html#series-bar) 配置 (只支持两个系列) |  [BarSeriesOption, BarSeriesOption] |  -  |
+| textColor   | 全局文本的颜色                                        |  string   |    `#333`    |
+| colors   | 左右两边柱条的颜色                                        |  [string, string]   |  -   |
 |  rounded  | 柱图是否显示圆角                                             |   boolean  |   `false`   |
 | background | 柱条是否显示背景 (传 string 类型时表示具体的颜色值)|  boolean \| string   | `false` |
 | barWidth | 柱条的宽度 |  number   | `18` |
