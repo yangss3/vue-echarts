@@ -21,20 +21,23 @@
       theme="light"
       :rounded="true"
       background
-      :category="['Mon1111', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']"
+      text-color="blue"
+      :category="['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']"
       :series="[
-        {name: 'China', data: [12,33,22,11,24,66,33], itemStyle: {color: 'teal'}},
-        {name: 'USA', data: [12,33,22,11,24,66,33].reverse(), itemStyle: {color: 'yellow'}},
+        {name: 'China', data: [12,33,22,11,24,66,33]},
+        {name: 'USA', data: [12,33,22,11,24,66,33].reverse()},
       ]"
     />
   </div>
   <div style="height: 500px">
     <PieChart
       bordered
-      type="ring"
+      type="pie"
       show-legend
-      text-color="blue"
+      text-color="orange"
       label-formatter="{b}:{c}"
+      :radius="['40%','80%']"
+      :border-radius="10"
       :series="{
         data: [
           {value: 1048, name: '搜索引擎'},
@@ -49,7 +52,7 @@
   <RatioChart
     height="500px"
     type="liquid"
-    color="teal"
+    color="blue"
     :value="0.56"
   />
   <RatioChart
@@ -57,7 +60,8 @@
     :value="50"
     :max="100"
     title="评价总评分数"
-    color="blue"
+    color="teal"
+    :gradient="['red', 'orange']"
   />
   <RatioChart
     height="500px"
@@ -65,7 +69,8 @@
     :value="46"
     :max="100"
     title="评价总评分数"
-    color="red"
+    color="teal"
+    shadow
   />
   <div style="height: 500px">
     <BaseChart
