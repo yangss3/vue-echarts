@@ -14,7 +14,8 @@
     "build": "tsc",
     "docs:dev": "vitepress dev docs --port 4000",
     "docs:build": "vitepress build docs",
-    "docs:serve": "vitepress serve docs"
+    "docs:serve": "vitepress serve docs",
+    "prepare": "husky install"
   },
   "dependencies": {
     "color": "^3.1.3",
@@ -22,8 +23,8 @@
     "lodash-es": "^4.17.21"
   },
   "peerDependencies": {
-    "vue": "^3.0.5",
-    "echarts": "^5.1.0"
+    "echarts": "^5.1.0",
+    "vue": "^3.0.5"
   },
   "devDependencies": {
     "@types/color": "^3.0.1",
@@ -31,12 +32,17 @@
     "@types/node": "^14.14.41",
     "@vitejs/plugin-vue": "^1.2.1",
     "@vue/compiler-sfc": "^3.0.5",
+    "@yangss/eslint-config-ts": "^0.1.4",
+    "@yangss/init-git-repo": "^0.0.6",
+    "echarts": "^5.1.0",
+    "eslint": "^7.28.0",
+    "husky": "^6.0.0",
+    "lint-staged": "^11.0.0",
     "typescript": "^4.1.3",
     "vite": "^2.1.5",
     "vitepress": "^0.13.2",
-    "vue-tsc": "^0.0.24",
     "vue": "^3.0.5",
-    "echarts": "^5.1.0"
+    "vue-tsc": "^0.0.24"
   },
   "publishConfig": {
     "access": "public"
@@ -54,5 +60,8 @@
   "vetur": {
     "tags": "lib/tags.json",
     "attributes": "lib/attributes.json"
+  },
+  "lint-staged": {
+    "*.ts": "eslint --fix"
   }
 }
