@@ -32,7 +32,7 @@ import { BaseChart, LineBarChart } from '@yangss/vue-echarts'
 export default {
   components: {
     BaseChart,
-    GridChart
+    LineBarChart
   },
   // ...
 }
