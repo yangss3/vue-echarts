@@ -22,7 +22,7 @@
 |   smooth    | 线图是否开启平滑处理，如果是 number 类型(取值范围 0 到 1)，表示平滑程度，越小表示越接近折线段，反之越平滑。设为 `true` 时相当于设为 0.5             |   boolean \| number    |   `false`  |
 | barWidth |柱条的宽度，不设置时自适应 |   string \| number  |  - |
 | showToolbox | 是否显示 toolbox (type 为 'line' 或 'vertical-bar' 时生效) |   boolean  |  `false` |
-|  showLabel  | 是否显示柱条的 label (仅当 type 为 'horizontal-bar' 时生效) |  boolean   | `false` |
+|  showLabel  | 是否显示 label |  boolean   | `false` |
 | showBackground | 柱条是否显示背景 (仅当 type 为 'horizontal-bar' 时生效) |  boolean   | `false` |
 | labelTop | 当柱条显示背景时，柱条的 label 距离柱条包装容器顶部的距离，可以是百分比(相对于柱条容器高度)或绝对像数值。 (仅当 type 为 'horizontal-bar' 时生效) |  string \| number   | `25%` |
 | option   | ECharts 原生的配置对象 [EChartsOption](https://echarts.apache.org/zh/option.html)  | EChartsOption |    -     |

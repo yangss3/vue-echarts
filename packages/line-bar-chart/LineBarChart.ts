@@ -62,7 +62,6 @@ export default defineComponent({
       type: [Number, String] as PropType<number | string>
     },
     // 是否显示label
-    // type === 'horizontal-bar'
     showLabel: {
       type: Boolean,
       default: false
@@ -122,7 +121,7 @@ export default defineComponent({
         yAxis: isHorizontal
           ? [{
             type: 'category',
-            data: props.category,
+            data: [...props.category].reverse(),
             nameTextStyle: { color: props.textColor },
             axisLabel: { color: props.textColor }
           }]
@@ -162,14 +161,17 @@ export default defineComponent({
               backgroundStyle: {
                 borderRadius: !props.stack && props.rounded ? [0, 100, 100, 0] : 0
               }
-            }, item)
+            }, {
+              ...item, 
+              data: (isHorizontal ? cloneDeep(item.data)?.reverse() : item.data) as any
+            })
           })
       }
     })
 
     onMounted(() => renderChart())
     watch(baseOption, renderChart)
-    function renderChart() {
+    function renderChart() {    
       const propOption = cloneDeep(props.option)
       propOption.xAxis = wrapWithArray(propOption.xAxis)
       propOption.yAxis = wrapWithArray(propOption.yAxis)
