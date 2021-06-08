@@ -85,6 +85,13 @@ export default defineComponent({
       const seriesArray = wrapWithArray(props.series)
       const hasBar = seriesArray.some(s => s.type === 'bar') || props.type === 'vertical-bar' || props.type === 'horizontal-bar'
       const isHorizontal = props.type === 'horizontal-bar'
+      const xAxisNum = Array.isArray(props.option.xAxis) 
+        ? props.option.xAxis.length 
+        : 1
+      const yAxisNum = Array.isArray(props.option.yAxis) 
+        ? props.option.yAxis.length 
+        : 1
+      
       return {
         title: {
           text: props.title,
@@ -105,19 +112,33 @@ export default defineComponent({
         },
         xAxis: isHorizontal
           ? [{
-            show: !props.showLabel,
-            type: 'value',
-            name: props.valueAxisName,
-            nameTextStyle: { color: props.textColor },
-            axisLabel: { color: props.textColor }
-          }]
-          : [{
-            type: 'category',
-            boundaryGap: hasBar,
-            data: props.category,
-            nameTextStyle: { color: props.textColor },
-            axisLabel: { color: props.textColor }
-          }],
+              show: !props.showLabel,
+              type: 'value',
+              name: props.valueAxisName,
+              nameTextStyle: { color: props.textColor },
+              axisLabel: { color: props.textColor }
+            }]
+          : xAxisNum === 1 
+            ? [{
+                type: 'category',
+                boundaryGap: hasBar,
+                data: props.category,
+                nameTextStyle: { color: props.textColor },
+                axisLabel: { color: props.textColor }
+              }]
+            : [
+                {
+                  type: 'category',
+                  boundaryGap: hasBar,
+                  data: props.category,
+                  nameTextStyle: { color: props.textColor },
+                  axisLabel: { color: props.textColor }
+                },
+                {
+                  nameTextStyle: { color: props.textColor },
+                  axisLabel: { color: props.textColor }
+                }
+              ],
         yAxis: isHorizontal
           ? [{
             type: 'category',
@@ -125,12 +146,25 @@ export default defineComponent({
             nameTextStyle: { color: props.textColor },
             axisLabel: { color: props.textColor }
           }]
-          : [{
-            type: 'value',
-            name: props.valueAxisName,
-            nameTextStyle: { color: props.textColor },
-            axisLabel: { color: props.textColor }
-          }],
+          : yAxisNum === 1
+            ? [{
+                type: 'value',
+                name: props.valueAxisName,
+                nameTextStyle: { color: props.textColor },
+                axisLabel: { color: props.textColor }
+              }]
+            : [
+                {
+                  type: 'value',
+                  name: props.valueAxisName,
+                  nameTextStyle: { color: props.textColor },
+                  axisLabel: { color: props.textColor }
+                },
+                {
+                  nameTextStyle: { color: props.textColor },
+                  axisLabel: { color: props.textColor }
+                }
+              ],
         series: seriesArray
           .map((item) => {
             const isBar = item.type === 'bar' || props.type === 'vertical-bar' || props.type === 'horizontal-bar'
