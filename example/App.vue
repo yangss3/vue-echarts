@@ -1,6 +1,8 @@
 <template>
   <div style="height: 500px">
+    <span @click="fuck">click</span>
     <LineBarChart
+      chart-id="mychart1"
       theme="light"
       type="vertical-bar"
       text-color="red"
@@ -18,6 +20,7 @@
   </div>
   <div style="height: 400px">
     <DoubleSidedChart
+      chart-id="mychart2"
       theme="light"
       :rounded="true"
       background
@@ -31,6 +34,7 @@
   </div>
   <div style="height: 500px">
     <PieChart
+      chart-id="mychart3"
       bordered
       type="pie"
       show-legend
@@ -128,10 +132,27 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-
+import { defineComponent, onMounted } from 'vue'
+import { useInnerChart } from '../packages/index'
 export default defineComponent({
   name: 'App',
+  setup() {
+    const mychart1 = useInnerChart('mychart1')
+    const mychart2 = useInnerChart('mychart2')
+    const mychart3 = useInnerChart('mychart3')
+    
+    onMounted(() => {
+      console.log(mychart1.value?.getOption())
+      console.log(mychart2.value?.getOption())
+      console.log(mychart3.value?.getOption())
+    })
+
+    return {
+      fuck() {
+        console.log(mychart1.value)
+      }
+    }
+  }
 })
 </script>
 
