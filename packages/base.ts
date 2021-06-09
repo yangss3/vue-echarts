@@ -1,6 +1,6 @@
 import * as echarts from 'echarts'
 import { ECharts, EChartsOption } from 'echarts'
-import { h, nextTick, onBeforeUnmount, onMounted, PropType, ref, shallowRef } from 'vue'
+import { h, inject, nextTick, onBeforeUnmount, onMounted, PropType, ref, Ref, shallowRef } from 'vue'
 
 export const baseProps = {
   height: {
@@ -28,6 +28,10 @@ export const baseProps = {
   option: {
     type: Object as PropType<EChartsOption>,
     default: () => ({})
+  },
+  // chart的id，唯一，当需要在父组件中获取当前组件的 echart 实例对象时，请设置这个属性
+  chartId: {
+    type: String
   }
 }
 
@@ -35,6 +39,7 @@ export function useChart (props: any) {
   const el = ref<HTMLDivElement>()
   const chart = shallowRef<ECharts>()
   const contentWidth = ref(0)
+  const injectChart = props.chartId ? inject(`vue_echarts__${props.chartId}`) as Ref<any> : undefined
 
   const computeWidth = () => {
     const width = chart.value?.getWidth() as number
@@ -57,6 +62,9 @@ export function useChart (props: any) {
   }
   onMounted(async () => {
     chart.value = echarts.init(el.value!, props.theme)
+    if (injectChart) {
+      injectChart.value = chart.value
+    }
     props.adaptive && window.addEventListener('resize', resize)
     await nextTick()
     computeWidth()
