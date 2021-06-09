@@ -3,9 +3,9 @@ import {
   defineComponent,
   watch,
   PropType,
-  onMounted,
-} from "vue";
-import { merge } from "lodash-es";
+  onMounted
+} from 'vue'
+import { merge } from 'lodash-es'
 import { EChartsOption, BarSeriesOption } from 'echarts'
 import { baseProps, useChart } from '../base'
 
@@ -55,7 +55,7 @@ export default defineComponent({
       default: () => ({})
     }
   },
-  setup(props) {
+  setup (props) {
     const baseOption = computed(() => {
       const grid = merge({
         width: '40%',
@@ -68,7 +68,7 @@ export default defineComponent({
           text: props.title,
           textStyle: { color: props.textColor }
         },
-        legend: { show: true, textStyle: { color: props.textColor} },
+        legend: { show: true, textStyle: { color: props.textColor } },
         tooltip: {
           trigger: 'axis'
         },
@@ -95,7 +95,7 @@ export default defineComponent({
         xAxis: [
           { gridIndex: 0, show: false, inverse: true },
           { gridIndex: 1, show: false },
-          { gridIndex: 2, show: false },
+          { gridIndex: 2, show: false }
         ],
         yAxis: [
           { gridIndex: 0, type: 'category', show: false },
@@ -109,9 +109,9 @@ export default defineComponent({
             data: props.category
               .map(value => ({
                 value,
-                textStyle: { align: "center" }
+                textStyle: { align: 'center' }
               }))
-              .reverse(),
+              .reverse()
           },
           { gridIndex: 2, type: 'category', show: false }
         ],
@@ -139,7 +139,7 @@ export default defineComponent({
                 xAxisIndex: i === 0 ? 0 : 2,
                 yAxisIndex: i === 0 ? 0 : 2,
                 barWidth: props.barWidth,
-                barGap: "-100%",
+                barGap: '-100%',
                 z: -1,
                 label: {
                   show: true,
@@ -165,7 +165,7 @@ export default defineComponent({
     const { chart, render } = useChart(props)
     onMounted(() => renderChart())
     watch(baseOption, renderChart)
-    function renderChart() {
+    function renderChart () {
       chart.value && chart.value.setOption(baseOption.value, true)
     }
     return render

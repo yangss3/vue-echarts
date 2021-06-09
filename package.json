@@ -12,6 +12,7 @@
   "scripts": {
     "demo": "vite",
     "build": "tsc",
+    "lint": "eslint packages/**/*.ts --fix",
     "docs:dev": "vitepress dev docs --port 4000",
     "docs:build": "vitepress build docs",
     "docs:serve": "vitepress serve docs",

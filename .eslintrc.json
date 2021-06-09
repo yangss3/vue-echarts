@@ -1,5 +1,6 @@
 {
   "extends": [
     "@yangss/eslint-config-ts"
-  ]
+  ],
+  "ignorePatterns": ["lib"]
 }

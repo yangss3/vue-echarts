@@ -4,10 +4,10 @@ import {
   watch,
   PropType,
   onMounted
-} from "vue";
-import { cloneDeep, merge } from "lodash-es"
-import { EChartsOption, number, PieSeriesOption } from 'echarts'
-import { wrapWithArray } from "../utils/helper"
+} from 'vue'
+import { cloneDeep, merge } from 'lodash-es'
+import { EChartsOption, PieSeriesOption } from 'echarts'
+import { wrapWithArray } from '../utils/helper'
 import { baseProps, useChart } from '../base'
 
 export default defineComponent({
@@ -62,7 +62,7 @@ export default defineComponent({
       default: () => []
     }
   },
-  setup(props) {
+  setup (props) {
     const baseOption = computed<EChartsOption>(() => {
       const isRing = props.type === 'ring' || props.type === 'angle-ring'
       const isAngle = props.type === 'angle' || props.type === 'angle-ring'
@@ -81,29 +81,33 @@ export default defineComponent({
             type: 'pie',
             roseType: isAngleRing ? 'area' : (isAngle ? 'radius' : false),
             center: ['50%', '50%'],
-            radius: isRing 
+            radius: isRing
               ? props.radius
               : Array.isArray(props.radius)
                 ? props.radius[1]
                 : props.radius,
-            itemStyle: props.bordered ? {
-              borderRadius: props.borderRadius,
-              borderWidth: props.borderWidth,
-              borderColor: props.borderColor
-            } : undefined,
+            itemStyle: props.bordered
+              ? {
+                  borderRadius: props.borderRadius,
+                  borderWidth: props.borderWidth,
+                  borderColor: props.borderColor
+                }
+              : undefined,
             label: {
               show: !props.hideLabel,
               position: props.hideLabel ? 'center' : 'outside',
               color: props.textColor,
               formatter: props.labelFormatter
             },
-            emphasis: props.hideLabel ? {
-              label: {
-                show: true,
-                fontSize: 30,
-                fontWeight: 'bold'
-              }
-            } : undefined
+            emphasis: props.hideLabel
+              ? {
+                  label: {
+                    show: true,
+                    fontSize: 30,
+                    fontWeight: 'bold'
+                  }
+                }
+              : undefined
 
           }, item))
       }
@@ -112,7 +116,7 @@ export default defineComponent({
     const { chart, render } = useChart(props)
     onMounted(() => renderChart())
     watch(baseOption, renderChart)
-    function renderChart() {
+    function renderChart () {
       const propOption = cloneDeep(props.option)
       propOption.series = wrapWithArray(propOption.series)
       chart.value && chart.value.setOption(merge(baseOption.value, propOption), true)

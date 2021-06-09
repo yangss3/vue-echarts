@@ -1,15 +1,15 @@
 import * as echarts from 'echarts'
-import { ECharts, EChartsOption } from 'echarts';
-import { h, nextTick, onBeforeUnmount, onMounted, PropType, ref, shallowRef } from 'vue';
+import { ECharts, EChartsOption } from 'echarts'
+import { h, nextTick, onBeforeUnmount, onMounted, PropType, ref, shallowRef } from 'vue'
 
 export const baseProps = {
   height: {
     type: [String, Number] as PropType<string | number>,
-    default: "100%"
+    default: '100%'
   },
   width: {
     type: [String, Number] as PropType<string | number>,
-    default: "100%"
+    default: '100%'
   },
   adaptive: {
     type: Boolean,
@@ -31,7 +31,7 @@ export const baseProps = {
   }
 }
 
-export function useChart(props: any) {
+export function useChart (props: any) {
   const el = ref<HTMLDivElement>()
   const chart = shallowRef<ECharts>()
   const contentWidth = ref(0)
@@ -57,12 +57,12 @@ export function useChart(props: any) {
   }
   onMounted(async () => {
     chart.value = echarts.init(el.value!, props.theme)
-    props.adaptive && window.addEventListener("resize", resize)
+    props.adaptive && window.addEventListener('resize', resize)
     await nextTick()
     computeWidth()
   })
   onBeforeUnmount(() => {
-    props.adaptive && window.removeEventListener("resize", resize)
+    props.adaptive && window.removeEventListener('resize', resize)
   })
 
   return {

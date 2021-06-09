@@ -3,11 +3,11 @@ import {
   defineComponent,
   watch,
   PropType,
-  onMounted,
-} from "vue";
-import { cloneDeep, merge } from "lodash-es";
+  onMounted
+} from 'vue'
+import { cloneDeep, merge } from 'lodash-es'
 import { EChartsOption, LineSeriesOption, BarSeriesOption } from 'echarts'
-import { wrapWithArray } from "../utils/helper"
+import { wrapWithArray } from '../utils/helper'
 import { baseProps, useChart } from '../base'
 
 type SeriesOption = LineSeriesOption | BarSeriesOption
@@ -18,7 +18,7 @@ export default defineComponent({
     ...baseProps,
     // 类型
     type: {
-      type: String as PropType<"line" | "vertical-bar" | 'horizontal-bar'>,
+      type: String as PropType<'line' | 'vertical-bar' | 'horizontal-bar'>
     },
     // 标题
     title: String,
@@ -79,19 +79,19 @@ export default defineComponent({
       default: '25%'
     }
   },
-  setup(props) {
+  setup (props) {
     const { chart, render, contentWidth } = useChart(props)
     const baseOption = computed<EChartsOption>(() => {
       const seriesArray = wrapWithArray(props.series)
       const hasBar = seriesArray.some(s => s.type === 'bar') || props.type === 'vertical-bar' || props.type === 'horizontal-bar'
       const isHorizontal = props.type === 'horizontal-bar'
-      const xAxisNum = Array.isArray(props.option.xAxis) 
-        ? props.option.xAxis.length 
+      const xAxisNum = Array.isArray(props.option.xAxis)
+        ? props.option.xAxis.length
         : 1
-      const yAxisNum = Array.isArray(props.option.yAxis) 
-        ? props.option.yAxis.length 
+      const yAxisNum = Array.isArray(props.option.yAxis)
+        ? props.option.yAxis.length
         : 1
-      
+
       return {
         title: {
           text: props.title,
@@ -105,7 +105,7 @@ export default defineComponent({
           show: props.showToolbox && !isHorizontal,
           feature: {
             dataZoom: {},
-            magicType: {type: ['line', 'bar', 'stack']},
+            magicType: { type: ['line', 'bar', 'stack'] },
             restore: {},
             saveAsImage: {}
           }
@@ -118,7 +118,7 @@ export default defineComponent({
               nameTextStyle: { color: props.textColor },
               axisLabel: { color: props.textColor }
             }]
-          : xAxisNum === 1 
+          : xAxisNum === 1
             ? [{
                 type: 'category',
                 boundaryGap: hasBar,
@@ -141,11 +141,11 @@ export default defineComponent({
               ],
         yAxis: isHorizontal
           ? [{
-            type: 'category',
-            data: [...props.category].reverse(),
-            nameTextStyle: { color: props.textColor },
-            axisLabel: { color: props.textColor }
-          }]
+              type: 'category',
+              data: [...props.category].reverse(),
+              nameTextStyle: { color: props.textColor },
+              axisLabel: { color: props.textColor }
+            }]
           : yAxisNum === 1
             ? [{
                 type: 'value',
@@ -170,7 +170,7 @@ export default defineComponent({
             const isBar = item.type === 'bar' || props.type === 'vertical-bar' || props.type === 'horizontal-bar'
             return merge({
               type: isBar ? 'bar' : 'line',
-              stack: props.stack ? 'stack': undefined,
+              stack: props.stack ? 'stack' : undefined,
               label: {
                 show: props.showLabel,
                 color: props.textColor,
@@ -196,7 +196,7 @@ export default defineComponent({
                 borderRadius: !props.stack && props.rounded ? [0, 100, 100, 0] : 0
               }
             }, {
-              ...item, 
+              ...item,
               data: (isHorizontal ? cloneDeep(item.data)?.reverse() : item.data) as any
             })
           })
@@ -205,7 +205,7 @@ export default defineComponent({
 
     onMounted(() => renderChart())
     watch(baseOption, renderChart)
-    function renderChart() {    
+    function renderChart () {
       const propOption = cloneDeep(props.option)
       propOption.xAxis = wrapWithArray(propOption.xAxis)
       propOption.yAxis = wrapWithArray(propOption.yAxis)
