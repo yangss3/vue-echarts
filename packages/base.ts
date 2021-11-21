@@ -39,7 +39,7 @@ export function useChart (props: any) {
   const el = ref<HTMLDivElement>()
   const chart = shallowRef<ECharts>()
   const contentWidth = ref(0)
-  const injectChart = props.chartId ? inject(`vue_echarts__${props.chartId}`) as Ref<any> : undefined
+  const injectChart = props.chartId ? inject(`vue_echarts__${props.chartId}`, null) as Ref<any> | null : undefined
 
   const computeWidth = () => {
     const width = chart.value?.getWidth() as number

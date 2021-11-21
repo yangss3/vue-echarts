@@ -3,13 +3,10 @@
     <span @click="fuck">click</span>
     <LineBarChart
       chart-id="mychart1"
-      theme="light"
-      type="vertical-bar"
-      text-color="red"
+      type="line"
       smooth
       rounded
-      show-label
-      show-background
+      :show-label="false"
       title="父亲颇为请问"
       :category="['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']"
       :series="[
@@ -139,12 +136,12 @@ export default defineComponent({
   setup() {
     const mychart1 = useInnerChart('mychart1')
     const mychart2 = useInnerChart('mychart2')
-    const mychart3 = useInnerChart('mychart3')
-    
+    // const mychart3 = useInnerChart('mychart3')
+
     onMounted(() => {
       console.log(mychart1.value?.getOption())
       console.log(mychart2.value?.getOption())
-      console.log(mychart3.value?.getOption())
+      // console.log(mychart3.value?.getOption())
     })
 
     return {
