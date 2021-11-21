@@ -89,6 +89,7 @@ export default defineComponent({
     }
   },
   setup (props) {
+    const { chart, render,color } = useChart(props)
     const baseOption = computed(() => {
       const textStyle = merge({
         valueSize: 30,
@@ -98,6 +99,7 @@ export default defineComponent({
         color: props.color
       }, props.textStyle)
       return {
+        color,
         series: [
           // https://github.com/ecomfe/echarts-liquidfill#readme
           props.type === 'liquid'
@@ -278,7 +280,6 @@ export default defineComponent({
       }
     })
 
-    const { chart, render } = useChart(props)
     onMounted(() => renderChart())
     watch(baseOption, renderChart)
     function renderChart () {

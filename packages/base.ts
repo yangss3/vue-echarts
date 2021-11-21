@@ -39,6 +39,7 @@ export function useChart (props: any) {
   const el = ref<HTMLDivElement>()
   const chart = shallowRef<ECharts>()
   const contentWidth = ref(0)
+  const color = inject('vue_echarts__color') as string[] | undefined
   const injectChart = props.chartId ? inject(`vue_echarts__${props.chartId}`, null) as Ref<any> | null : undefined
 
   const computeWidth = () => {
@@ -76,6 +77,7 @@ export function useChart (props: any) {
   return {
     el,
     chart,
+    color,
     contentWidth,
     render: () => h(
       'div',

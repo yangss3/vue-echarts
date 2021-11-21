@@ -80,7 +80,7 @@ export default defineComponent({
     }
   },
   setup (props) {
-    const { chart, render, contentWidth } = useChart(props)
+    const { chart, render, contentWidth, color } = useChart(props)
     const baseOption = computed<EChartsOption>(() => {
       const seriesArray = wrapWithArray(props.series)
       const hasBar = seriesArray.some(s => s.type === 'bar') || props.type === 'vertical-bar' || props.type === 'horizontal-bar'
@@ -93,6 +93,7 @@ export default defineComponent({
         : 1
 
       return {
+        color,
         title: {
           text: props.title,
           textStyle: { color: props.textColor }

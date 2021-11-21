@@ -63,11 +63,13 @@ export default defineComponent({
     }
   },
   setup (props) {
+    const { chart, render, color } = useChart(props)
     const baseOption = computed<EChartsOption>(() => {
       const isRing = props.type === 'ring' || props.type === 'angle-ring'
       const isAngle = props.type === 'angle' || props.type === 'angle-ring'
       const isAngleRing = props.type === 'angle-ring'
       return {
+        color,
         title: {
           text: props.title,
           textStyle: { color: props.textColor }
@@ -113,7 +115,6 @@ export default defineComponent({
       }
     })
 
-    const { chart, render } = useChart(props)
     onMounted(() => renderChart())
     watch(baseOption, renderChart)
     function renderChart () {

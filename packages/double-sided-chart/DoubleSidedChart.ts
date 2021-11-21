@@ -56,6 +56,7 @@ export default defineComponent({
     }
   },
   setup (props) {
+    const { chart, render, color } = useChart(props)
     const baseOption = computed(() => {
       const grid = merge({
         width: '40%',
@@ -64,6 +65,7 @@ export default defineComponent({
         labelLeft: '51%'
       }, props.grid)
       return {
+        color,
         title: {
           text: props.title,
           textStyle: { color: props.textColor }
@@ -162,7 +164,6 @@ export default defineComponent({
       } as EChartsOption
     })
 
-    const { chart, render } = useChart(props)
     onMounted(() => renderChart())
     watch(baseOption, renderChart)
     function renderChart () {

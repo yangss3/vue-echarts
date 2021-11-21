@@ -5,8 +5,16 @@ import DoubleSidedChart from './double-sided-chart'
 import PieChart from './pie-chart'
 import RatioChart from './ratio-chart'
 import { ECharts } from 'echarts'
+import { apple } from 'color'
 
-function install (app: App) {
+export interface Options {
+  color?: string[]
+}
+
+
+
+function install (app: App, option?: Options) {
+  app.provide('vue_echarts__color', option?.color)
   app
     .use(BaseChart as any)
     .use(LineBarChart as any)
