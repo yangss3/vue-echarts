@@ -1,6 +1,6 @@
 {
   "name": "@yangss/vue-echarts",
-  "version": "0.1.0",
+  "version": "0.0.12",
   "description": "A few ECharts5.x components for Vue3.x",
   "module": "lib/index.js",
   "main": "lib/index.js",
@@ -18,8 +18,7 @@
     "docs:serve": "vitepress serve docs",
     "pub-patch": "npm version patch && npm run build && npm publish",
     "pub-minor": "npm version minor && npm run build && npm publish",
-    "pub-major": "npm version major && npm run build && npm publish",
-    "prepare": "husky install"
+    "pub-major": "npm version major && npm run build && npm publish"
   },
   "dependencies": {
     "color": "^3.1.3",
