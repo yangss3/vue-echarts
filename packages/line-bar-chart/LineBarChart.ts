@@ -124,7 +124,9 @@ export default defineComponent({
                 boundaryGap: hasBar,
                 data: props.category,
                 nameTextStyle: { color: props.textColor },
-                axisLabel: { color: props.textColor }
+                axisLabel: { color: props.textColor },
+                axisLine: { lineStyle: { color: '#aaa' } },
+                axisTick: { show: false }
               }]
             : [
                 {
@@ -132,11 +134,15 @@ export default defineComponent({
                   boundaryGap: hasBar,
                   data: props.category,
                   nameTextStyle: { color: props.textColor },
-                  axisLabel: { color: props.textColor }
+                  axisLabel: { color: props.textColor },
+                  axisLine: { lineStyle: { color: '#aaa' } },
+                  axisTick: { show: false }
                 },
                 {
                   nameTextStyle: { color: props.textColor },
-                  axisLabel: { color: props.textColor }
+                  axisLabel: { color: props.textColor },
+                  axisLine: { lineStyle: { color: '#aaa' } },
+                  axisTick: { show: false }
                 }
               ],
         yAxis: isHorizontal
@@ -144,7 +150,9 @@ export default defineComponent({
               type: 'category',
               data: [...props.category].reverse(),
               nameTextStyle: { color: props.textColor },
-              axisLabel: { color: props.textColor }
+              axisLabel: { color: props.textColor },
+              axisLine: { lineStyle: { color: '#aaa' } },
+              axisTick: { show: false }
             }]
           : yAxisNum === 1
             ? [{
